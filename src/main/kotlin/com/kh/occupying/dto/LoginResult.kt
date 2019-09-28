@@ -33,7 +33,7 @@ data class LoginResult(
         @JsonProperty("strEvtTgtFlg")
         val strEvtTgtFlg: String,
         @JsonProperty("strEmailAdr")
-        val strEmailAdr: String,
+        val email: String,
         @JsonProperty("strSexDvCd")
         val strSexDvCd: String,
         @JsonProperty("strCustLeadFlgNm")
@@ -63,7 +63,7 @@ data class LoginResult(
         @JsonProperty("strLognTpCd2")
         val strLognTpCd2: String,
         @JsonProperty("strCustNm")
-        val strCustNm: String,
+        val userName: String,
         @JsonProperty("strCustClCd")
         val strCustClCd: String,
         @JsonProperty("strHdcpTpCd")

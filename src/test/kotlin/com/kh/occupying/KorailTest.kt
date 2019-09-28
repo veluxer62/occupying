@@ -18,6 +18,8 @@ class KorailTest {
         assertThat(actual).isNotNull
         assertThat(actual.resultCode).isEqualTo("SUCC")
         assertThat(actual.MobileCredencial).isNotEmpty()
+        assertThat(actual.email).isNotEmpty()
+        assertThat(actual.userName).isNotEmpty()
     }
 }
 
