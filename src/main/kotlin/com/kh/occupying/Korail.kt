@@ -1,13 +1,15 @@
 package com.kh.occupying
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.kh.occupying.domain.Login
+import com.kh.occupying.domain.Train
 import com.kh.occupying.dto.FindTrainResult
 import com.kh.occupying.dto.LoginResult
-import org.springframework.web.util.DefaultUriBuilderFactory
+import com.kh.occupying.dto.ReservationResult
 import org.springframework.web.util.UriBuilder
-import org.springframework.web.util.UriBuilderFactory
 import reactor.core.publisher.Mono
 import java.net.URI
+import java.time.format.DateTimeFormatter
 
 class Korail(private val client: WebClientWrapper) {
 
@@ -21,6 +23,50 @@ class Korail(private val client: WebClientWrapper) {
                destination: String): Mono<FindTrainResult> {
         val uri = makeSearchUri(departureAt,
                 destination, departureStation)
+        return client.get(uri, jacksonTypeRef())
+    }
+
+    fun reserve(login: Login, train: Train): Mono<ReservationResult> {
+        val dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+        val timeFormatter = DateTimeFormatter.ofPattern("HHmmss")
+        val uri: (UriBuilder) -> URI = {
+            it.path("certification.TicketReservation")
+                    .queryParam("Device", "AD")
+                    .queryParam("txtSeatAttCd1", "000") // 좌석 속성
+                    .queryParam("txtSeatAttCd2", "000")
+                    .queryParam("txtSeatAttCd3", "000")
+                    .queryParam("txtSeatAttCd4", "015")
+                    .queryParam("txtSeatAttCd5", "000")
+                    .queryParam("txtStndFlg", "N") // 입석여부
+                    .queryParam("txtJrnyCnt", "1") // 여정수
+                    .queryParam("txtJrnySqno1", "001") // 여정일련번호
+                    .queryParam("txtJrnyTpCd1", "11") // 여정유형코드
+                    .queryParam("txtTotPsgCnt", train.passenger.headCount)
+                    .queryParam("txtDptRsStnCd1", train.departureStationCode)
+                    .queryParam("txtDptDt1",
+                            train.departureDate.format(dateFormatter))
+                    .queryParam("txtDptTm1",
+                            train.departureTime.format(timeFormatter))
+                    .queryParam("txtArvRsStnCd1", train.destinationCode)
+                    .queryParam("txtTrnNo1", train.no)
+                    .queryParam("txtTrnClsfCd1", train.trainClass)
+                    .queryParam("txtPsrmClCd1", train.seatClass)
+                    .queryParam("txtTrnGpCd1", train.trainGroup)
+                    .queryParam("txtPsgTpCd1", train.passenger.type)
+                    .queryParam("txtDiscKndCd1",
+                            train.passenger.discount.type)
+                    .queryParam("txtCompaCnt1",
+                            train.passenger.headCount)
+                    .queryParam("txtCardCode_1",
+                            train.passenger.discount.code)
+                    .queryParam("txtCardNo_1",
+                            train.passenger.discount.no)
+                    .queryParam("txtCardPw_1",
+                            train.passenger.discount.password)
+                    .queryParam("key", login.key)
+
+                    .build()
+        }
         return client.get(uri, jacksonTypeRef())
     }
 
