@@ -8,7 +8,7 @@ data class LoginResponse(
         @JsonProperty("h_msg_cd")
         override val responseCode: String,
         @JsonProperty("strResult")
-        override val resultCode: String,
+        override val resultCode: ResultCode,
         @JsonProperty("Key")
         val key: String,
         @JsonProperty("strDiscCouponFlg")

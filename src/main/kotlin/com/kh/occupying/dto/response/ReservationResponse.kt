@@ -8,7 +8,7 @@ data class ReservationResponse(
         @JsonProperty("h_msg_cd")
         override val responseCode: String,
         @JsonProperty("strResult")
-        override val resultCode: String,
+        override val resultCode: ResultCode,
         @JsonProperty("h_seat_att_disc_flg")
         val seatAttDiscFlg: String,
         @JsonProperty("jrny_infos")

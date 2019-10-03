@@ -8,7 +8,7 @@ data class SearchResponse(
         @JsonProperty("h_msg_cd")
         override val responseCode: String,
         @JsonProperty("strResult")
-        override val resultCode: String,
+        override val resultCode: ResultCode,
         @JsonProperty("strJobId")
         val strJobId: String,
         @JsonProperty("h_menu_id")
