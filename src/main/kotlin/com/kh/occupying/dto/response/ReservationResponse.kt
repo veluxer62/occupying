@@ -1,8 +1,14 @@
-package com.kh.occupying.dto
+package com.kh.occupying.dto.response
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class ReservationResult(
+data class ReservationResponse(
+        @JsonProperty("h_msg_txt")
+        override val responseMessage: String,
+        @JsonProperty("h_msg_cd")
+        override val responseCode: String,
+        @JsonProperty("strResult")
+        override val resultCode: String,
         @JsonProperty("h_seat_att_disc_flg")
         val seatAttDiscFlg: String,
         @JsonProperty("jrny_infos")
@@ -13,8 +19,6 @@ data class ReservationResult(
         val jrnyCnt: String,
         @JsonProperty("h_msg_txt3")
         val msgTxt3: String,
-        @JsonProperty("h_msg_cd")
-        val msgCd: String,
         @JsonProperty("h_lunchbox_chg_flg")
         val lunchboxChgFlg: String,
         @JsonProperty("h_pay_limit_msg")
@@ -23,16 +27,12 @@ data class ReservationResult(
         val msgTxt2: String,
         @JsonProperty("h_tmp_job_sqno1")
         val tmpJobSqno1: String,
-        @JsonProperty("strResult")
-        val resultCode: String,
         @JsonProperty("psgDiscAdd_infos")
         val psgDiscAddInfos: PsgDiscAddInfos,
         @JsonProperty("h_tot_rcvd_amt")
         val totRcvdAmt: String,
         @JsonProperty("h_dlay_apv_txt")
         val dlayApvTxt: String,
-        @JsonProperty("h_msg_txt")
-        val msgTxt: String,
         @JsonProperty("h_guide")
         val guide: String,
         @JsonProperty("h_pre_stl_tgt_flg")
@@ -73,4 +73,4 @@ data class ReservationResult(
         val msgTxt5: String,
         @JsonProperty("h_acnt_apv_no")
         val acntApvNo: String
-)
+) : CommonResponse

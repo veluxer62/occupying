@@ -1,6 +1,6 @@
 package com.kh.occupying.domain
 
-import com.kh.occupying.dto.Train as Dto
+import com.kh.occupying.dto.response.Train as Dto
 import java.time.LocalDate
 import java.time.LocalTime
 

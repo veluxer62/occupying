@@ -1,4 +1,4 @@
-package com.kh.occupying.dto
+package com.kh.occupying.dto.response
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

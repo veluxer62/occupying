@@ -1,68 +1,68 @@
-package com.kh.occupying.dto
+package com.kh.occupying.dto.response
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class SeatInfo(
         @JsonProperty("h_dcnt_reld_no")
-        val h_dcnt_reld_no: String,
+        val dcntReldNo: String,
         @JsonProperty("h_etc_seat_att_cd")
-        val h_etc_seat_att_cd: String,
+        val etcSeatAttCd: String,
         @JsonProperty("h_smk_seat_att_cd")
-        val h_smk_seat_att_cd: String,
+        val smkSeatAttCd: String,
         @JsonProperty("h_srcar_no")
-        val h_srcar_no: String,
+        val srcarNo: String,
         @JsonProperty("h_dir_seat_att_cd")
-        val h_dir_seat_att_cd: String,
+        val dirSeatAttCd: String,
         @JsonProperty("h_dcnt_knd_cd2")
-        val h_dcnt_knd_cd2: String,
+        val dcntKndCd2: String,
         @JsonProperty("h_cert_no")
-        val h_cert_no: String,
+        val certNo: String,
         @JsonProperty("h_rcvd_amt")
-        val h_rcvd_amt: String,
+        val rcvdAmt: String,
         @JsonProperty("h_seat_att_cd_2")
-        val h_seat_att_cd_2: String,
+        val seatAttCd2: String,
         @JsonProperty("h_dcnt_knd_cd1_nm")
-        val h_dcnt_knd_cd1_nm: String,
+        val dcntKndCd1Nm: String,
         @JsonProperty("h_cert_dv_cd")
-        val h_cert_dv_cd: String,
+        val certDvCd: String,
         @JsonProperty("h_psrm_cl_cd")
-        val h_psrm_cl_cd: String,
+        val psrmClCd: String,
         @JsonProperty("h_seat_no")
-        val h_seat_no: String,
+        val seatNo: String,
         @JsonProperty("h_dcnt_knd_cd2_nm")
-        val h_dcnt_knd_cd2_nm: String,
+        val dcntKndCd2Nm: String,
         @JsonProperty("h_rq_seat_att_cd")
-        val h_rq_seat_att_cd: String,
+        val rqSeatAttCd: String,
         @JsonProperty("h_sgr_nm")
-        val h_sgr_nm: String,
+        val sgrNm: String,
         @JsonProperty("h_dcnt_knd_cd1")
-        val h_dcnt_knd_cd1: String,
+        val dcntKndCd1: String,
         @JsonProperty("h_seat_fare")
-        val h_seat_fare: String,
+        val seatFare: String,
         @JsonProperty("h_loc_seat_att_cd")
-        val h_loc_seat_att_cd: String,
+        val locSeatAttCd: String,
         @JsonProperty("h_movie_psrm_flg")
-        val h_movie_psrm_flg: String,
+        val moviePsrmFlg: String,
         @JsonProperty("h_disc_card_knd")
-        val h_disc_card_knd: String,
+        val discCardKnd: String,
         @JsonProperty("h_seat_prc")
-        val h_seat_prc: String,
+        val seatPrc: String,
         @JsonProperty("h_dcnt_knd_cd_nm1")
-        val h_dcnt_knd_cd_nm1: String,
+        val dcntKndCdNm1: String,
         @JsonProperty("h_cont_seat_cnt")
-        val h_cont_seat_cnt: String,
+        val contSeatCnt: String,
         @JsonProperty("h_frbs_cd")
-        val h_frbs_cd: String,
+        val frbsCd: String,
         @JsonProperty("h_tot_disc_amt")
-        val h_tot_disc_amt: String,
+        val totDiscAmt: String,
         @JsonProperty("h_disc_card_re_cnt")
-        val h_disc_card_re_cnt: String,
+        val discCardReCnt: String,
         @JsonProperty("h_dcnt_knd_cd_nm2")
-        val h_dcnt_knd_cd_nm2: String,
+        val dcntKndCdNm2: String,
         @JsonProperty("h_psg_tp_cd")
-        val h_psg_tp_cd: String,
+        val psgTpCd: String,
         @JsonProperty("h_bkcls_cd")
-        val h_bkcls_cd: String,
+        val bkclsCd: String,
         @JsonProperty("h_disc_card_use_cnt")
-        val h_disc_card_use_cnt: String
+        val discCardUseCnt: String
 )

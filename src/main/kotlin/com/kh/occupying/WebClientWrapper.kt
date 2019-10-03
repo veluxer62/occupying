@@ -14,9 +14,9 @@ import java.net.URI
 class WebClientWrapper(private val properties: KorailProperties) {
     var cookie: List<String> = listOf()
 
-    fun <T> get(uri: (UriBuilder) -> URI,
+    fun <T : CommonResponse> get(uri: (UriBuilder) -> URI,
                 responseType: TypeReference<T>,
-                headers: Map<String, String> = mapOf()): Mono<T> {
+                headers: Map<String, String> = mapOf()): Mono<CommonResponse> {
         return WebClient.create("${properties.host}${properties.contextPath}")
                 .get()
                 .uri(uri)
@@ -28,7 +28,12 @@ class WebClientWrapper(private val properties: KorailProperties) {
                 .retrieve()
                 .bodyToMono(String::class.java)
                 .map {
-                    ObjectMapper().readValue<T>(it.orEmpty(), responseType)
+                    val mapper = jacksonObjectMapper()
+                    try {
+                        mapper.readValue<T>(it.orEmpty(), responseType)
+                    } catch (e: JsonMappingException) {
+                        mapper.readValue(it, FailResponse::class.java)
+                    }
                 }
     }
 

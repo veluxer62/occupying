@@ -1,8 +1,8 @@
-package com.kh.occupying.dto
+package com.kh.occupying.dto.response
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class SeatInfos(
         @JsonProperty("seat_info")
-        val seat_info: List<SeatInfo>
+        val seatInfo: List<SeatInfo>
 )

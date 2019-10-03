@@ -3,9 +3,9 @@ package com.kh.occupying
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.kh.occupying.domain.Login
 import com.kh.occupying.domain.Train
-import com.kh.occupying.dto.FindTrainResult
+import com.kh.occupying.dto.response.SearchResponse
 import com.kh.occupying.dto.response.LoginResponse
-import com.kh.occupying.dto.ReservationResult
+import com.kh.occupying.dto.response.ReservationResponse
 import com.kh.occupying.dto.response.CommonResponse
 import org.springframework.web.util.UriBuilder
 import reactor.core.publisher.Mono
@@ -28,17 +28,17 @@ class Korail(private val client: WebClientWrapper) {
 
     fun search(departureAt: String,
                departureStation: String,
-               destination: String): Mono<FindTrainResult> {
+               destination: String): Mono<CommonResponse> {
         val uri = makeSearchUri(departureAt,
                 destination, departureStation)
-        return client.get(uri, jacksonTypeRef())
+        return client.get(uri, jacksonTypeRef<SearchResponse>())
     }
 
-    fun reserve(login: Login, train: Train): Mono<ReservationResult> {
+    fun reserve(login: Login, train: Train): Mono<CommonResponse> {
         val uri = makeReserveUri(train, login)
         return client.get(
                 uri = uri,
-                responseType = jacksonTypeRef(),
+                responseType = jacksonTypeRef<ReservationResponse>(),
                 headers = login.generateHeaders()
         )
     }

@@ -1,34 +1,34 @@
-package com.kh.occupying.dto
+package com.kh.occupying.dto.response
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class FindTrainResult(
-        @JsonProperty("h_msg_cd")
-        val h_msg_cd: String,
+data class SearchResponse(
         @JsonProperty("h_msg_txt")
-        val h_msg_txt: String,
+        override val responseMessage: String,
+        @JsonProperty("h_msg_cd")
+        override val responseCode: String,
+        @JsonProperty("strResult")
+        override val resultCode: String,
         @JsonProperty("strJobId")
         val strJobId: String,
         @JsonProperty("h_menu_id")
-        val h_menu_id: String,
+        val menuId: String,
         @JsonProperty("h_gd_no")
-        val h_gd_no: String,
+        val gdNo: String,
         @JsonProperty("h_seat_cnt_first")
-        val h_seat_cnt_first: String,
+        val seatCntFirst: String,
         @JsonProperty("h_seat_cnt_second")
-        val h_seat_cnt_second: String,
+        val seatCntSecond: String,
         @JsonProperty("h_next_pg_flg")
-        val h_next_pg_flg: String,
+        val nextPgFlg: String,
         @JsonProperty("txtGoHour_first")
-        val txtGoHour_first: String,
+        val txtGoHourFirst: String,
         @JsonProperty("h_rslt_cnt")
-        val h_rslt_cnt: String,
+        val rsltCnt: String,
         @JsonProperty("h_agree_txt")
-        val h_agree_txt: String,
+        val agreeTxt: String,
         @JsonProperty("trn_infos")
         val train: ScheduledTrain,
         @JsonProperty("h_notice_msg")
-        val h_notice_msg: String,
-        @JsonProperty("strResult")
-        val resultCode: String
-)
+        val noticeMsg: String
+) : CommonResponse

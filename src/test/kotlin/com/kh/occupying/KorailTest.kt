@@ -3,6 +3,7 @@ package com.kh.occupying
 import com.kh.occupying.domain.Login
 import com.kh.occupying.domain.Train
 import com.kh.occupying.dto.response.FailResponse
+import com.kh.occupying.dto.response.SearchResponse
 import com.kh.occupying.dto.response.LoginResponse
 import org.junit.Before
 import org.junit.Test
@@ -90,8 +91,9 @@ class KorailTest {
         StepVerifier
                 .create(actual)
                 .expectNextMatches {
-                    it.resultCode == "SUCC" &&
-                            it.train.items.isNotEmpty()
+                    val result = it as SearchResponse
+                    result.resultCode == "SUCC" &&
+                            result.train.items.isNotEmpty()
                 }
                 .verifyComplete()
     }
@@ -121,7 +123,8 @@ class KorailTest {
         val actual = Mono
                 .zip(loginResult, searchResult)
                 .flatMap {
-                    val canReserveTrain = it.t2.train.items
+                    val canReserveTrain = (it.t2 as SearchResponse)
+                            .train.items
                             .first { x -> x.canReservation == "Y" }
                     val train = Train.fromDto(canReserveTrain)
                     val login = Login.fromDto(it.t1 as LoginResponse)
