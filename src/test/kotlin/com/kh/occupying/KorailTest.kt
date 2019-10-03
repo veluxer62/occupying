@@ -124,7 +124,7 @@ class KorailTest {
                     val canReserveTrain = it.t2.train.items
                             .first { x -> x.canReservation == "Y" }
                     val train = Train.fromDto(canReserveTrain)
-                    val login = Login(it.t1 as LoginResponse)
+                    val login = Login.fromDto(it.t1 as LoginResponse)
 
                     sut.reserve(login, train)
                 }

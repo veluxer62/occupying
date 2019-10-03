@@ -15,8 +15,15 @@ import java.time.format.DateTimeFormatter
 class Korail(private val client: WebClientWrapper) {
 
     fun login(id: String, pw: String): Mono<CommonResponse> {
-        val uri = makeUri(id, pw)
-        return client.post(uri, jacksonTypeRef<LoginResponse>())
+        val uri = makeLoginUri(id, pw)
+        return client
+                .post(uri, jacksonTypeRef<LoginResponse>())
+                .map {
+                    if (it is LoginResponse)
+                        it.copy(cookie = client.cookie)
+                    else
+                        it
+                }
     }
 
     fun search(departureAt: String,
@@ -28,9 +35,18 @@ class Korail(private val client: WebClientWrapper) {
     }
 
     fun reserve(login: Login, train: Train): Mono<ReservationResult> {
+        val uri = makeReserveUri(train, login)
+        return client.get(
+                uri = uri,
+                responseType = jacksonTypeRef(),
+                headers = login.generateHeaders()
+        )
+    }
+
+    private fun makeReserveUri(train: Train, login: Login): (UriBuilder) -> URI {
         val dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
         val timeFormatter = DateTimeFormatter.ofPattern("HHmmss")
-        val uri: (UriBuilder) -> URI = {
+        return {
             it.path("certification.TicketReservation")
                     .queryParam("Device", "AD")
                     .queryParam("txtSeatAttCd1", "000") // 좌석 속성
@@ -68,10 +84,9 @@ class Korail(private val client: WebClientWrapper) {
 
                     .build()
         }
-        return client.get(uri, jacksonTypeRef())
     }
 
-    private fun makeUri(id: String, pw: String): (UriBuilder) -> URI {
+    private fun makeLoginUri(id: String, pw: String): (UriBuilder) -> URI {
         return {
             it.path("login.Login")
                     .queryParam("Device", "AD")

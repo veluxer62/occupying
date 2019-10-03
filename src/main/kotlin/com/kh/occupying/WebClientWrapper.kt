@@ -12,14 +12,19 @@ import reactor.core.publisher.Mono
 import java.net.URI
 
 class WebClientWrapper(private val properties: KorailProperties) {
-    private var cookie: List<String> = listOf()
+    var cookie: List<String> = listOf()
 
     fun <T> get(uri: (UriBuilder) -> URI,
-                responseType: TypeReference<T>): Mono<T> {
+                responseType: TypeReference<T>,
+                headers: Map<String, String> = mapOf()): Mono<T> {
         return WebClient.create("${properties.host}${properties.contextPath}")
                 .get()
                 .uri(uri)
-                .header("Cookie", cookie.joinToString(";"))
+                .headers {
+                    headers.keys.forEach {key ->
+                        it.set(key, headers[key])
+                    }
+                }
                 .retrieve()
                 .bodyToMono(String::class.java)
                 .map {
@@ -40,7 +45,6 @@ class WebClientWrapper(private val properties: KorailProperties) {
                 }
                 .map {
                     val mapper = jacksonObjectMapper()
-
                     try {
                         mapper.readValue<T>(it, responseType)
                     } catch (e: JsonMappingException) {

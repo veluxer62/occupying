@@ -1,7 +1,6 @@
 package com.kh.occupying.dto.response
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import java.io.Serializable
 
 data class LoginResponse(
         @JsonProperty("h_msg_txt")
@@ -75,5 +74,6 @@ data class LoginResponse(
         @JsonProperty("strAbrdStnNm")
         val strAbrdStnNm: String,
         @JsonProperty("strGoffStnCd")
-        val strGoffStnCd: String
+        val strGoffStnCd: String,
+        val cookie: List<String>?
 ) : CommonResponse
