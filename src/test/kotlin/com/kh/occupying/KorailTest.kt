@@ -41,11 +41,10 @@ class KorailTest {
         StepVerifier
                 .create(actual)
                 .expectNextMatches {
-                    val loginResult = it as LoginResponse
-                    loginResult.resultCode == ResultCode.SUCC &&
-                            loginResult.MobileCredencial.isNotEmpty() &&
-                            loginResult.email.isNotEmpty() &&
-                            loginResult.userName.isNotEmpty()
+                    val response = it as LoginResponse
+                    response.resultCode == ResultCode.SUCC &&
+                            response.key.isNotEmpty() &&
+                            (response.cookie ?: listOf()).isNotEmpty()
                 }
                 .verifyComplete()
     }
