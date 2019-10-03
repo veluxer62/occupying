@@ -2,6 +2,8 @@ package com.kh.occupying
 
 import com.kh.occupying.domain.Login
 import com.kh.occupying.domain.Train
+import com.kh.occupying.dto.response.FailResponse
+import com.kh.occupying.dto.response.LoginResponse
 import org.junit.Before
 import org.junit.Test
 import org.springframework.boot.test.context.SpringBootTest
@@ -38,10 +40,30 @@ class KorailTest {
         StepVerifier
                 .create(actual)
                 .expectNextMatches {
-                    it.resultCode == "SUCC" &&
-                            it.MobileCredencial.isNotEmpty() &&
-                            it.email.isNotEmpty() &&
-                            it.userName.isNotEmpty()
+                    val loginResult = it as LoginResponse
+                    loginResult.resultCode == "SUCC" &&
+                            loginResult.MobileCredencial.isNotEmpty() &&
+                            loginResult.email.isNotEmpty() &&
+                            loginResult.userName.isNotEmpty()
+                }
+                .verifyComplete()
+    }
+
+    @Test
+    fun `given wrong id and password login method will return fail response correctly`() {
+        // Act
+        val id = UUID.randomUUID().toString()
+        val pw = UUID.randomUUID().toString()
+        val actual = Korail(client).login(id, pw)
+
+        // Assert
+        StepVerifier
+                .create(actual)
+                .expectNextMatches {
+                    val result = it as FailResponse
+                    result.responseCode.isNotEmpty() &&
+                            result.responseMessage.isNotEmpty() &&
+                            result.resultCode.isNotEmpty()
                 }
                 .verifyComplete()
     }
@@ -102,7 +124,7 @@ class KorailTest {
                     val canReserveTrain = it.t2.train.items
                             .first { x -> x.canReservation == "Y" }
                     val train = Train.fromDto(canReserveTrain)
-                    val login = Login(it.t1)
+                    val login = Login(it.t1 as LoginResponse)
 
                     sut.reserve(login, train)
                 }

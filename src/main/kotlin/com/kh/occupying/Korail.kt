@@ -4,8 +4,9 @@ import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.kh.occupying.domain.Login
 import com.kh.occupying.domain.Train
 import com.kh.occupying.dto.FindTrainResult
-import com.kh.occupying.dto.LoginResult
+import com.kh.occupying.dto.response.LoginResponse
 import com.kh.occupying.dto.ReservationResult
+import com.kh.occupying.dto.response.CommonResponse
 import org.springframework.web.util.UriBuilder
 import reactor.core.publisher.Mono
 import java.net.URI
@@ -13,9 +14,9 @@ import java.time.format.DateTimeFormatter
 
 class Korail(private val client: WebClientWrapper) {
 
-    fun login(id: String, pw: String): Mono<LoginResult> {
+    fun login(id: String, pw: String): Mono<CommonResponse> {
         val uri = makeUri(id, pw)
-        return client.post(uri, jacksonTypeRef())
+        return client.post(uri, jacksonTypeRef<LoginResponse>())
     }
 
     fun search(departureAt: String,

@@ -1,9 +1,15 @@
-package com.kh.occupying.dto
+package com.kh.occupying.dto.response
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.io.Serializable
 
-data class LoginResult(
+data class LoginResponse(
+        @JsonProperty("h_msg_txt")
+        override val responseMessage: String,
+        @JsonProperty("h_msg_cd")
+        override val responseCode: String,
+        @JsonProperty("strResult")
+        override val resultCode: String,
         @JsonProperty("Key")
         val key: String,
         @JsonProperty("strDiscCouponFlg")
@@ -26,10 +32,6 @@ data class LoginResult(
         val strHdcpFlg: String,
         @JsonProperty("strBtdt")
         val strBtdt: String,
-        @JsonProperty("h_msg_cd")
-        val hMsgCd: String,
-        @JsonProperty("strResult")
-        val resultCode: String,
         @JsonProperty("strEvtTgtFlg")
         val strEvtTgtFlg: String,
         @JsonProperty("strEmailAdr")
@@ -38,8 +40,6 @@ data class LoginResult(
         val strSexDvCd: String,
         @JsonProperty("strCustLeadFlgNm")
         val strCustLeadFlgNm: String,
-        @JsonProperty("h_msg_txt")
-        val hMsgTxt: String,
         @JsonProperty("strAthnFlg")
         val strAthnFlg: String,
         @JsonProperty("strMbCrdNo")
@@ -76,4 +76,4 @@ data class LoginResult(
         val strAbrdStnNm: String,
         @JsonProperty("strGoffStnCd")
         val strGoffStnCd: String
-) : Serializable
+) : CommonResponse
