@@ -1,11 +1,11 @@
-package com.kh.occupying
+package com.kh.api
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class OccupyingApplication
+class Application
 
 fun main(args: Array<String>) {
-	runApplication<OccupyingApplication>(*args)
+	runApplication<Application>(*args)
 }

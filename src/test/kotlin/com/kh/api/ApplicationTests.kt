@@ -1,4 +1,4 @@
-package com.kh.occupying
+package com.kh.api
 
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner
 
 @RunWith(SpringRunner::class)
 @SpringBootTest
-class OccupyingApplicationTests {
+class ApplicationTests {
 
 	@Test
 	fun contextLoads() {
