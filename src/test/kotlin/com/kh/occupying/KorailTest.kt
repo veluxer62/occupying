@@ -1,6 +1,7 @@
 package com.kh.occupying
 
 import com.kh.occupying.domain.Login
+import com.kh.occupying.domain.SeatCode
 import com.kh.occupying.domain.Train
 import com.kh.occupying.dto.response.*
 import org.junit.Before
@@ -99,10 +100,12 @@ class KorailTest {
         val actual = Mono
                 .zip(loginResult, searchResult)
                 .flatMap {
-                    val canReserveTrain = (it.t2 as SearchResponse)
+                    val train = (it.t2 as SearchResponse)
                             .train.items
-                            .first { x -> x.canReservation == "Y" }
-                    val train = Train.fromDto(canReserveTrain)
+                            .map { item -> Train.fromDto(item) }
+                            .first { item ->
+                                item.coachSeatCode == SeatCode.AVAILABLE
+                            }
                     val login = Login.fromDto(it.t1 as LoginResponse)
 
                     sut.reserve(login, train)

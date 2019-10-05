@@ -24,7 +24,7 @@ data class SearchResponse(
         @JsonProperty("txtGoHour_first")
         val txtGoHourFirst: String,
         @JsonProperty("h_rslt_cnt")
-        val rsltCnt: String,
+        val rsltCnt: Int,
         @JsonProperty("h_agree_txt")
         val agreeTxt: String,
         @JsonProperty("trn_infos")

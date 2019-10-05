@@ -14,7 +14,7 @@ data class Train(
         val departureStationCode: String,
         val destinationCode: String,
         val seatClass: String,
-        val coachSeatCode: String,
+        val coachSeatCode: SeatCode,
         val passenger: Passenger
 ) {
     companion object {
@@ -29,7 +29,11 @@ data class Train(
                     departureStationCode = dto.departureStationCode,
                     destinationCode = dto.destinationCode,
                     seatClass = "1",
-                    coachSeatCode = dto.genRsvCd,
+                    coachSeatCode = when(dto.genRsvCd) {
+                        "00" -> SeatCode.NONE
+                        "11" -> SeatCode.AVAILABLE
+                        else -> SeatCode.SOLD_OUT
+                    },
                     passenger = Passenger(
                             type = "1",
                             headCount = 1,
