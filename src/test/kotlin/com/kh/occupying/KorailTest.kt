@@ -6,7 +6,6 @@ import com.kh.occupying.domain.Train
 import com.kh.occupying.dto.response.*
 import org.junit.Before
 import org.junit.Test
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.core.io.ClassPathResource
 import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
@@ -14,7 +13,6 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-@SpringBootTest
 class KorailTest {
 
     lateinit var id: String
