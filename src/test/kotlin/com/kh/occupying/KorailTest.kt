@@ -4,6 +4,8 @@ import com.kh.occupying.domain.Login
 import com.kh.occupying.domain.SeatCode
 import com.kh.occupying.domain.Train
 import com.kh.occupying.dto.response.*
+import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.springframework.core.io.ClassPathResource
@@ -112,10 +114,15 @@ class KorailTest {
         StepVerifier
                 .create(actual)
                 .expectNextMatches {
-                    (it.resultCode == ResultCode.SUCC ||
-                            it.resultCode == ResultCode.FAIL) &&
-                            it.responseCode.isNotEmpty() &&
-                            it.responseMessage.isNotEmpty()
+                    if (it is ReservationResponse) {
+                        assertThat(it.jrnyInfos.jrnyInfo).isNotEmpty
+                        assertThat(it.psgInfos.psgInfo).isNotEmpty
+                    } else {
+                        assertThat(it.responseCode).isEqualTo("WRR800029")
+                        assertThat(it.responseMessage).contains("동일한")
+                    }
+
+                    true
                 }
                 .verifyComplete()
     }
