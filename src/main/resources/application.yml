@@ -1,3 +1,5 @@
+server:
+  port: 80
 korail:
   host: https://smart.letskorail.com
   contextPath: /classes/com.korail.mobile.
