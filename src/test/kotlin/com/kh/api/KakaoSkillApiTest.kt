@@ -99,8 +99,12 @@ class KakaoSkillApiTest {
                 .responseBody
 
         // Assert
+        val outputs = actual?.template?.outputs
+        val listCard = outputs?.first()?.listCard
         assertThat(actual).isNotNull
         assertThat(actual?.version).isEqualTo("2.0")
-        assertThat(actual?.template?.outputs).isNotEmpty
+        assertThat(outputs).isNotEmpty
+        assertThat(listCard?.items?.size).isLessThanOrEqualTo(5)
+        assertThat(listCard?.buttons?.size).isLessThanOrEqualTo(2)
     }
 }

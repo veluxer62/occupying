@@ -25,10 +25,10 @@ data class SkillResponse(
                                                         ),
                                                         items = trains.map {
                                                             ItemsItem.fromTrain(it)
-                                                        },
+                                                        }.take(5),
                                                         buttons = trains.map {
                                                             ButtonsItem.fromTrain(it)
-                                                        }
+                                                        }.take(2)
                                                 )
                                         )
                                 )
