@@ -10,7 +10,6 @@ import org.springframework.core.io.ClassPathResource
 import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 class KorailTest {
@@ -122,11 +121,9 @@ class KorailTest {
     }
 
     private fun searchTrain(): Mono<CommonResponse> {
-        val departureDate = LocalDate.now()
+        val departureAt = LocalDate.now()
                 .plusDays(1)
-                .format(DateTimeFormatter.ofPattern("yyyyMMdd"))
-        // 2019091507
-        val departureAt = departureDate + "07"
+                .atTime(7, 0, 0)
         val departureStation = "서울"
         val destination = "부산"
 

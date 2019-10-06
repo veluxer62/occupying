@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
 import reactor.core.publisher.Mono
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Component
 class KakaoSkillHandler(val korail: Korail) {
@@ -16,14 +18,9 @@ class KakaoSkillHandler(val korail: Korail) {
         return req.bodyToMono(SkillPayload::class.java)
                 .flatMap {
                     val params = it.action.params
-                    val departureAt = params.departureDate +
-                            params.departureTime
-
-                    korail.search(
-                            departureAt = departureAt,
-                            departureStation = params.departureStation,
-                            destination = params.destination
-                    )
+                    val departureAt = LocalDateTime.parse(
+                            params.departureDate + params.departureTime,
+                            DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))
 
                     korail.search(
                             departureAt = departureAt,

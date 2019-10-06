@@ -10,6 +10,7 @@ import com.kh.occupying.dto.response.CommonResponse
 import org.springframework.web.util.UriBuilder
 import reactor.core.publisher.Mono
 import java.net.URI
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class Korail(private val client: WebClientWrapper) {
@@ -26,7 +27,7 @@ class Korail(private val client: WebClientWrapper) {
                 }
     }
 
-    fun search(departureAt: String,
+    fun search(departureAt: LocalDateTime,
                departureStation: String,
                destination: String): Mono<CommonResponse> {
         val uri = makeSearchUri(departureAt,
@@ -97,11 +98,13 @@ class Korail(private val client: WebClientWrapper) {
         }
     }
 
-    private fun makeSearchUri(departureAt: String,
+    private fun makeSearchUri(departureAt: LocalDateTime,
                               destination: String,
                               departureStation: String): (UriBuilder) -> URI {
-        val departureDate = departureAt.substring(0, 8)
-        val departureTime = departureAt.substring(8) + "0000"
+        val departureDate = departureAt
+                .format(DateTimeFormatter.ofPattern("yyyyMMdd"))
+        val departureTime = departureAt
+                .format(DateTimeFormatter.ofPattern("HHmmss"))
 
         return {
             it.path("seatMovie.ScheduleView")
