@@ -7,12 +7,14 @@ import java.time.LocalTime
 data class Train(
         val no: String,
         val trainGroup: String,
-        val trainClass: String,
+        val trainClass: TrainClass,
         val runDate: LocalDate,
         val departureDate: LocalDate,
         val departureTime: LocalTime,
-        val departureStationCode: String,
-        val destinationCode: String,
+        val departureStation: Station,
+        val arrivalDate: LocalDate,
+        val arrivalTime: LocalTime,
+        val destinationStation: Station,
         val seatClass: String,
         val coachSeatCode: SeatCode,
         val passenger: Passenger
@@ -22,12 +24,17 @@ data class Train(
             return Train(
                     no = dto.trnNo,
                     trainGroup = dto.trnGpCd,
-                    trainClass = dto.trainClass,
+                    trainClass = TrainClass.values()
+                            .first { it.code == dto.trainClassCode },
                     runDate = dto.runDate,
                     departureDate = dto.departureDate,
                     departureTime = dto.departureTime,
-                    departureStationCode = dto.departureStationCode,
-                    destinationCode = dto.destinationCode,
+                    departureStation = Station.values()
+                            .first { it.code == dto.departureStationCode },
+                    arrivalDate = dto.arrivalDate,
+                    arrivalTime = dto.arrivalTime,
+                    destinationStation = Station.values()
+                            .first { it.code == dto.destinationCode },
                     seatClass = "1",
                     coachSeatCode = when(dto.genRsvCd) {
                         "00" -> SeatCode.NONE

@@ -11,7 +11,7 @@ data class ItemsItem(
     companion object {
         fun fromTrain(train: Train): ItemsItem {
             return ItemsItem(
-                    title = "[${train.no}] ${train.departureDate} ${train.departureTime}, ${train.departureStationCode} -> ${train.destinationCode}",
+                    title = "[${train.no}] ${train.departureDate} ${train.departureTime}, ${train.departureStation} -> ${train.destinationStation}",
                     description = "",
                     imageUrl = "",
                     link = Link("")

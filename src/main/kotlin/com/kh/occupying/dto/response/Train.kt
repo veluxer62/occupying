@@ -35,7 +35,7 @@ data class Train(
         @JsonProperty("h_trn_gp_cd")
         val trnGpCd: String,
         @JsonProperty("h_trn_clsf_cd")
-        val trnClsfCd: String,
+        val trainClassCode: String,
         @JsonProperty("h_run_dt")
         @JsonDeserialize(using = LocalDateDeserializer::class)
         val runDate: LocalDate,
@@ -170,7 +170,7 @@ data class Train(
         @JsonProperty("h_info_txt")
         val infoTxt: String,
         @JsonProperty("h_trn_clsf_nm")
-        val trainClass: String,
+        val trainClassName: String,
         @JsonProperty("h_trn_gp_nm")
         val trnGpNm: String
 )

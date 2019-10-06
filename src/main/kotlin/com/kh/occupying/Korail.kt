@@ -60,12 +60,12 @@ class Korail(private val client: WebClientWrapper) {
                     .queryParam("txtJrnySqno1", "001") // 여정일련번호
                     .queryParam("txtJrnyTpCd1", "11") // 여정유형코드
                     .queryParam("txtTotPsgCnt", train.passenger.headCount)
-                    .queryParam("txtDptRsStnCd1", train.departureStationCode)
+                    .queryParam("txtDptRsStnCd1", train.departureStation)
                     .queryParam("txtDptDt1",
                             train.departureDate.format(dateFormatter))
                     .queryParam("txtDptTm1",
                             train.departureTime.format(timeFormatter))
-                    .queryParam("txtArvRsStnCd1", train.destinationCode)
+                    .queryParam("txtArvRsStnCd1", train.destinationStation)
                     .queryParam("txtTrnNo1", train.no)
                     .queryParam("txtTrnClsfCd1", train.trainClass)
                     .queryParam("txtPsrmClCd1", train.seatClass)
