@@ -2,7 +2,7 @@ package com.kh.api.request
 
 data class UserRequest(
         val timezone: String,
-        val params: UserRequestParams,
+        val params: Map<String, Any>,
         val block: Block,
         val utterance: String,
         val lang: String?,

@@ -25,6 +25,12 @@ class KakaoSkillHandler(val korail: Korail) {
                             departureStation = params.departureStation,
                             destination = params.destination
                     )
+
+                    korail.search(
+                            departureAt = departureAt,
+                            departureStation = params.departureStation,
+                            destination = params.destination
+                    )
                 }.flatMap {
                     ServerResponse.ok()
                             .contentType(MediaType.APPLICATION_JSON_UTF8)
