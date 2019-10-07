@@ -1,7 +1,5 @@
 package com.kh.api
 
-import com.kh.api.response.SkillResponse
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,6 +9,8 @@ import org.springframework.http.MediaType
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.reactive.function.BodyInserters
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @RunWith(SpringRunner::class)
 @WebFluxTest
@@ -23,6 +23,8 @@ class KakaoSkillApiTest {
     @Test
     fun `test find trains`() {
         // Arrange
+        val departureDate = LocalDate.now().plusDays(1)
+                .format(DateTimeFormatter.ofPattern("yyyyMMdd"))
         val body = """
             {
               "intent": {
@@ -54,7 +56,7 @@ class KakaoSkillApiTest {
                 "name": "g0xxzoae15",
                 "clientExtra": null,
                 "params": {
-                  "departure-date": "20191010",
+                  "departure-date": "$departureDate",
                   "departure-time": "070000",
                   "departure-station": "서울",
                   "destination": "부산"
@@ -62,8 +64,8 @@ class KakaoSkillApiTest {
                 "id": "krcu052b90c6angense4fxgy",
                 "detailParams": {
                   "departure-date": {
-                    "origin": "20191010",
-                    "value": "20191010",
+                    "origin": "$departureDate",
+                    "value": "$departureDate",
                     "groupName": ""
                   },
                   "departure-time": {
@@ -86,25 +88,19 @@ class KakaoSkillApiTest {
             }
         """.trimIndent()
 
-        // Act
-        val actual = webClient.post()
+        // Act & Assert
+        val listCardPath = "$.template.outputs[0].listCard"
+        webClient.post()
                 .uri("/api/kakao/find-trains")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .body(BodyInserters.fromObject(body))
                 .exchange()
                 .expectStatus().isOk
-                .expectBody(SkillResponse::class.java)
-                .returnResult()
-                .responseBody
-
-        // Assert
-        val outputs = actual?.template?.outputs
-        val listCard = outputs?.first()?.listCard
-        assertThat(actual).isNotNull
-        assertThat(actual?.version).isEqualTo("2.0")
-        assertThat(outputs).isNotEmpty
-        assertThat(listCard?.items?.size).isLessThanOrEqualTo(5)
-        assertThat(listCard?.buttons?.size).isLessThanOrEqualTo(2)
+                .expectBody()
+                .jsonPath("$.version").isEqualTo("2.0")
+                .jsonPath("$listCardPath.header.title").isNotEmpty
+                .jsonPath("$listCardPath.items").isArray
+                .jsonPath("$listCardPath.buttons").isArray
     }
 }

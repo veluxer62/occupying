@@ -2,6 +2,8 @@ package com.kh.api
 
 import com.kh.api.request.SkillPayload
 import com.kh.api.response.SkillResponse
+import com.kh.api.response.OutPuts
+import com.kh.api.response.listCard.ListCardTemplate
 import com.kh.occupying.Korail
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
@@ -28,9 +30,18 @@ class KakaoSkillHandler(val korail: Korail) {
                             destination = params.destination
                     )
                 }.flatMap {
+                    val template = OutPuts(
+                            outputs = listOf(
+                                    ListCardTemplate.fromCommonResponse(it)
+                            )
+                    )
+                    val body = SkillResponse(
+                            version = "2.0",
+                            template = template
+                    )
                     ServerResponse.ok()
                             .contentType(MediaType.APPLICATION_JSON_UTF8)
-                            .syncBody(SkillResponse.fromCommonResponse(it))
+                            .syncBody(body)
                 }
                 .switchIfEmpty(ServerResponse.notFound().build())
     }

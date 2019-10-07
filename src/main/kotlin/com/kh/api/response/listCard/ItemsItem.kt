@@ -1,4 +1,4 @@
-package com.kh.api.response
+package com.kh.api.response.listCard
 
 import com.kh.occupying.domain.Train
 

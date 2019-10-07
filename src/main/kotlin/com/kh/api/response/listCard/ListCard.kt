@@ -1,4 +1,4 @@
-package com.kh.api.response
+package com.kh.api.response.listCard
 
 data class ListCard(
         val header: Header,
