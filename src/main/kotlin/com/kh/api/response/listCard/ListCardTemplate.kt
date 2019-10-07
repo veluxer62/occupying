@@ -1,5 +1,6 @@
 package com.kh.api.response.listCard
 
+import com.kh.api.response.Buttons
 import com.kh.occupying.domain.Train
 import com.kh.occupying.dto.response.CommonResponse
 import com.kh.occupying.dto.response.SearchResponse
@@ -22,7 +23,11 @@ data class ListCardTemplate(
                                     ItemsItem.fromTrain(it)
                                 }.take(5),
                                 buttons = trains.map {
-                                    ButtonsItem.fromTrain(it)
+                                    Buttons(
+                                            label = "",
+                                            action = ActionType.webLink,
+                                            webLinkUrl = ""
+                                    )
                                 }.take(2)
                         )
                 )

@@ -1,5 +1,6 @@
 package com.kh.api.response.listCard
 
+import com.kh.api.response.Link
 import com.kh.occupying.domain.Train
 
 data class ItemsItem(

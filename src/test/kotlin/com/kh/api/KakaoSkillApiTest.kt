@@ -89,7 +89,7 @@ class KakaoSkillApiTest {
         """.trimIndent()
 
         // Act & Assert
-        val listCardPath = "$.template.outputs[0].listCard"
+        val listCardPath = "$.template.outputs[0].carousel"
         webClient.post()
                 .uri("/api/kakao/find-trains")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -99,8 +99,7 @@ class KakaoSkillApiTest {
                 .expectStatus().isOk
                 .expectBody()
                 .jsonPath("$.version").isEqualTo("2.0")
-                .jsonPath("$listCardPath.header.title").isNotEmpty
+                .jsonPath("$listCardPath.type").isEqualTo("basicCard")
                 .jsonPath("$listCardPath.items").isArray
-                .jsonPath("$listCardPath.buttons").isArray
     }
 }

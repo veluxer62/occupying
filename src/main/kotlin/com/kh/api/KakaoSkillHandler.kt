@@ -3,6 +3,7 @@ package com.kh.api
 import com.kh.api.request.SkillPayload
 import com.kh.api.response.SkillResponse
 import com.kh.api.response.OutPuts
+import com.kh.api.response.carousel.CarouselTemplate
 import com.kh.api.response.listCard.ListCardTemplate
 import com.kh.occupying.Korail
 import org.springframework.http.MediaType
@@ -32,7 +33,7 @@ class KakaoSkillHandler(val korail: Korail) {
                 }.flatMap {
                     val template = OutPuts(
                             outputs = listOf(
-                                    ListCardTemplate.fromCommonResponse(it)
+                                    CarouselTemplate.fromResponse(it)
                             )
                     )
                     val body = SkillResponse(

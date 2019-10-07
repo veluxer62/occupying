@@ -17,7 +17,8 @@ data class Train(
         val destinationStation: Station,
         val seatClass: String,
         val coachSeatCode: SeatCode,
-        val passenger: Passenger
+        val passenger: Passenger,
+        val fee: Int
 ) {
     companion object {
         fun fromDto(dto: Dto): Train {
@@ -45,7 +46,8 @@ data class Train(
                             type = "1",
                             headCount = 1,
                             discount = Discount()
-                    )
+                    ),
+                    fee = dto.rcvdAmt.toInt()
             )
         }
     }
