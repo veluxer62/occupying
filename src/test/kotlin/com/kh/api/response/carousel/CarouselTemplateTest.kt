@@ -40,6 +40,7 @@ class CarouselTemplateTest {
                 label = "예약하기",
                 action = ActionType.block,
                 messageText = "예약하기",
+                blockId = "5d982f9d92690d0001a43950",
                 extra = reserveExtra
         )
         return BasicCard(

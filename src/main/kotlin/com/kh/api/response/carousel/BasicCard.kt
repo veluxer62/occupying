@@ -32,6 +32,7 @@ data class BasicCard(
                     Buttons(
                             label = "예약하기",
                             action = ActionType.block,
+                            blockId = "5d982f9d92690d0001a43950",
                             messageText = "예약하기",
                             extra = extra
                     )
