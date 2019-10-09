@@ -1,26 +1,27 @@
 package com.kh.api.response
 
-import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonInclude.Include
 
 data class Link(
-        @JsonIgnore(value = false)
+        @JsonInclude(Include.NON_NULL)
         val mobile: String? = null,
 
-        @JsonIgnore(value = false)
+        @JsonInclude(Include.NON_NULL)
         val ios: String? = null,
 
-        @JsonIgnore(value = false)
+        @JsonInclude(Include.NON_NULL)
         val android: String? = null,
 
-        @JsonIgnore(value = false)
+        @JsonInclude(Include.NON_NULL)
         val pc: String? = null,
 
-        @JsonIgnore(value = false)
+        @JsonInclude(Include.NON_NULL)
         val mac: String? = null,
 
-        @JsonIgnore(value = false)
+        @JsonInclude(Include.NON_NULL)
         val win: String? = null,
 
-        @JsonIgnore(value = false)
+        @JsonInclude(Include.NON_NULL)
         val web: String? = null
 )

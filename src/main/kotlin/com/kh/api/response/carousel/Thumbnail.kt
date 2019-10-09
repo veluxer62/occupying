@@ -6,15 +6,15 @@ import com.kh.api.response.Link
 data class Thumbnail(
         val imageUrl: String,
 
-        @JsonIgnore(value = false)
+        @JsonIgnore(value = true)
         val link: Link? = null,
 
-        @JsonIgnore(value = false)
+        @JsonIgnore(value = true)
         val fixedRatio: Boolean? = null,
 
-        @JsonIgnore(value = false)
+        @JsonIgnore(value = true)
         val width: Int? = null,
 
-        @JsonIgnore(value = false)
+        @JsonIgnore(value = true)
         val height: Int? = null
 )
