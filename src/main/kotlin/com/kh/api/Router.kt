@@ -16,6 +16,7 @@ class Router : WebFluxConfigurer {
         "/api/kakao".nest {
             accept(MediaType.APPLICATION_JSON_UTF8).nest {
                 POST("/find-trains", handler::findTrains)
+                POST("/reserve-train", handler::reserveTrain)
             }
         }
 

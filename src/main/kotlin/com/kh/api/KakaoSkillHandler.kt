@@ -6,6 +6,8 @@ import com.kh.api.response.OutPuts
 import com.kh.api.response.carousel.CarouselTemplate
 import com.kh.occupying.Korail
 import com.kh.occupying.dto.response.CommonResponse
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
@@ -27,6 +29,16 @@ class KakaoSkillHandler(val korail: Korail) {
                             .syncBody(makeBody(it))
                 }
                 .switchIfEmpty(ServerResponse.notFound().build())
+    }
+
+    val logger: Logger = LoggerFactory.getLogger(this::class.java)
+
+    fun reserveTrain(req: ServerRequest): Mono<ServerResponse> {
+        return req.bodyToMono(String::class.java)
+                .flatMap {
+                    logger.info(it)
+                    ServerResponse.ok().syncBody("")
+                }
     }
 
     private fun makeBody(it: CommonResponse): SkillResponse<CarouselTemplate> {
