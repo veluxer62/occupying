@@ -4,9 +4,8 @@ import com.kh.api.response.Buttons
 import com.kh.api.response.buttonsExtra.ReserveExtra
 import com.kh.api.response.listCard.ActionType
 import com.kh.occupying.domain.Train
-import java.time.LocalDate
-import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 data class BasicCard(
         val title: String,
@@ -16,11 +15,17 @@ data class BasicCard(
 ) {
     companion object {
         fun fromTrain(train: Train): BasicCard {
-            val formatter = DateTimeFormatter.ofPattern("HH:mm")
-            val title = "[${train.trainClass.label}]${train.no} " +
-                    "[${train.departureStation}]${train.departureTime.format(formatter)}~" +
-                    "[${train.destinationStation}]${train.arrivalTime.format(formatter)}"
-            val description = "${train.fee}원 [${train.coachSeatCode.label}]"
+            return BasicCard(
+                    title = makeTitle(train),
+                    description = makeDescription(train),
+                    thumbnail = Thumbnail(
+                            imageUrl = "https://t1.daumcdn.net/cfile/tistory/026E244F51CB94FA0C"
+                    ),
+                    buttons = makeButton(train)
+            )
+        }
+
+        private fun makeButton(train: Train): List<Buttons<ReserveExtra>> {
             val extra = ReserveExtra(
                     departureDate = train.departureDate,
                     departureTime = train.departureTime,
@@ -28,7 +33,7 @@ data class BasicCard(
                     departureStation = train.departureStation,
                     destinationStation = train.destinationStation
             )
-            val buttons = listOf(
+            return listOf(
                     Buttons(
                             label = "예약하기",
                             action = ActionType.block,
@@ -37,15 +42,18 @@ data class BasicCard(
                             extra = extra
                     )
             )
-            val thumbnail = Thumbnail(
-                    imageUrl = "https://t1.daumcdn.net/cfile/tistory/026E244F51CB94FA0C"
-            )
-            return BasicCard(
-                    thumbnail = thumbnail,
-                    title = title,
-                    description = description,
-                    buttons = buttons
-            )
+        }
+
+        private fun makeDescription(train: Train) =
+                "열차[${train.no}] ${train.fee}원 [${train.coachSeatCode.label}]"
+
+        private fun makeTitle(train: Train): String {
+            val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+            val dateFormatter = DateTimeFormatter
+                    .ofPattern("MM월dd일")
+            return "[${train.trainClass.label}]${train.departureDate.format(dateFormatter)} " +
+                    "[${train.departureStation}]${train.departureTime.format(timeFormatter)}~" +
+                    "[${train.destinationStation}]${train.arrivalTime.format(timeFormatter)}"
         }
     }
 }

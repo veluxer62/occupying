@@ -12,15 +12,19 @@ data class CarouselTemplate(
             val carousel = Carousel(
                     type = CarouselType.basicCard,
                     items = if (response is SearchResponse) {
-                        response.train.items.map {
-                            BasicCard.fromTrain(Train.fromDto(it))
-                        }
+                        makeCarouselTemplate(response)
                     } else {
                         listOf()
                     }
             )
 
             return CarouselTemplate(carousel)
+        }
+
+        private fun makeCarouselTemplate(response: SearchResponse): List<BasicCard> {
+            return response.train.items.map {
+                BasicCard.fromTrain(Train.fromDto(it))
+            }
         }
     }
 }

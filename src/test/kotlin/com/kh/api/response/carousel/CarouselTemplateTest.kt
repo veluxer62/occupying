@@ -44,8 +44,8 @@ class CarouselTemplateTest {
                 extra = reserveExtra
         )
         return BasicCard(
-                title = "[KTX]233 [서울]07:00~[부산]09:30",
-                description = "48800원 [예약 가능]",
+                title = "[KTX]10월10일 [서울]07:00~[부산]09:30",
+                description = "열차[233] 48800원 [예약 가능]",
                 thumbnail = Thumbnail(
                         imageUrl = "https://t1.daumcdn.net/cfile/tistory/026E244F51CB94FA0C"
                 ),
