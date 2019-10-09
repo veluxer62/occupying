@@ -23,7 +23,7 @@ data class ListCardTemplate(
                                     ItemsItem.fromTrain(it)
                                 }.take(5),
                                 buttons = trains.map {
-                                    Buttons(
+                                    Buttons<Map<String, Any>>(
                                             label = "",
                                             action = ActionType.webLink,
                                             webLinkUrl = ""

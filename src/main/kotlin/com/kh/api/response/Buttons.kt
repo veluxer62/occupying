@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonInclude.Include
 import com.kh.api.response.listCard.ActionType
 
-data class Buttons(
+data class Buttons<T>(
         val label: String,
 
         val action: ActionType,
@@ -25,5 +25,5 @@ data class Buttons(
         val blockId: String? = null,
 
         @JsonInclude(Include.NON_NULL)
-        val extra: Map<String, Any>? = null
+        val extra: T? = null
 )

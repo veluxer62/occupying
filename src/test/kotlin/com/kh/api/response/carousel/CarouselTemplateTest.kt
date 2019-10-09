@@ -1,7 +1,9 @@
 package com.kh.api.response.carousel
 
 import com.kh.api.response.Buttons
+import com.kh.api.response.buttonsExtra.ReserveExtra
 import com.kh.api.response.listCard.ActionType
+import com.kh.occupying.domain.Station
 import com.kh.occupying.dto.response.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
@@ -27,11 +29,18 @@ class CarouselTemplateTest {
     }
 
     private fun getBasicCard(): BasicCard {
+        val reserveExtra = ReserveExtra(
+                departureDate = LocalDate.of(2019, 10, 10),
+                departureTime = LocalTime.of(7, 0, 0),
+                trainNo = "233",
+                departureStation = Station.서울,
+                destinationStation = Station.부산
+        )
         val button = Buttons(
                 label = "예약하기",
                 action = ActionType.block,
                 messageText = "예약하기",
-                extra = mapOf()
+                extra = reserveExtra
         )
         return BasicCard(
                 title = "[KTX]233 [서울]07:00~[부산]09:30",

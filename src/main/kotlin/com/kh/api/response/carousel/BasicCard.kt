@@ -1,15 +1,18 @@
 package com.kh.api.response.carousel
 
 import com.kh.api.response.Buttons
+import com.kh.api.response.buttonsExtra.ReserveExtra
 import com.kh.api.response.listCard.ActionType
 import com.kh.occupying.domain.Train
+import java.time.LocalDate
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 data class BasicCard(
         val title: String,
         val description: String,
         val thumbnail: Thumbnail,
-        val buttons: List<Buttons>
+        val buttons: List<Buttons<ReserveExtra>>
 ) {
     companion object {
         fun fromTrain(train: Train): BasicCard {
@@ -18,12 +21,19 @@ data class BasicCard(
                     "[${train.departureStation}]${train.departureTime.format(formatter)}~" +
                     "[${train.destinationStation}]${train.arrivalTime.format(formatter)}"
             val description = "${train.fee}원 [${train.coachSeatCode.label}]"
+            val extra = ReserveExtra(
+                    departureDate = train.departureDate,
+                    departureTime = train.departureTime,
+                    trainNo = train.no,
+                    departureStation = train.departureStation,
+                    destinationStation = train.destinationStation
+            )
             val buttons = listOf(
                     Buttons(
                             label = "예약하기",
                             action = ActionType.block,
                             messageText = "예약하기",
-                            extra = mapOf()
+                            extra = extra
                     )
             )
             val thumbnail = Thumbnail(

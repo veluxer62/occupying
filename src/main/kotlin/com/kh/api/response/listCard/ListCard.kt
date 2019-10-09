@@ -5,5 +5,5 @@ import com.kh.api.response.Buttons
 data class ListCard(
         val header: Header,
         val items: List<ItemsItem>,
-        val buttons: List<Buttons>
+        val buttons: List<Buttons<Map<String, Any>>>
 )
