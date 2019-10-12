@@ -18,4 +18,8 @@ data class Train(
         val coachSeatCode: SeatCode,
         val passenger: Passenger,
         val fee: Int
-)
+) {
+    fun hasSeat(): Boolean {
+        return coachSeatCode == SeatCode.AVAILABLE
+    }
+}
