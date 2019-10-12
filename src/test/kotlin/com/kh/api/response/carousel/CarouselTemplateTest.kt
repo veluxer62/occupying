@@ -161,7 +161,7 @@ class CarouselTemplateTest {
     }
 
     @Test
-    fun `given FailResponse fromResponse method will rturn template correctly`() {
+    fun `given FailResponse fromResponse method will return template correctly`() {
         // Arrange
         val response = FailResponse(
                 responseMessage = UUID.randomUUID().toString(),
