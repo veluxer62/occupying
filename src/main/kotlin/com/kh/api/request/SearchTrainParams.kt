@@ -22,8 +22,8 @@ data class SearchTrainParams(
                 )
                 return SearchParams(
                         departureDatetime = departureDateTime,
-                        destinationStation = departureStation,
-                        departureStation = destinationStation
+                        destinationStation = destinationStation,
+                        departureStation = departureStation
                 )
         }
 }
