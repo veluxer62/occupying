@@ -1,15 +1,16 @@
 package com.kh.api
 
 import com.kh.api.request.LoginParams
-import com.kh.api.request.SkillPayload
 import com.kh.api.request.SearchTrainParams
+import com.kh.api.request.SkillPayload
 import com.kh.api.response.OutPuts
 import com.kh.api.response.SkillResponse
 import com.kh.api.response.carousel.CarouselTemplate
 import com.kh.api.response.simpleText.SimpleText
 import com.kh.api.response.simpleText.SimpleTextTemplate
 import com.kh.occupying.Korail
-import com.kh.occupying.dto.response.*
+import com.kh.occupying.dto.response.LoginResponse
+import com.kh.occupying.dto.response.ReservationResponse
 import com.kh.util.mapTo
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
@@ -49,20 +50,17 @@ class KakaoSkillHandler(val korail: Korail) {
                     val searchPayload = it.action.clientExtra!!
                             .mapTo<SearchTrainParams>()
                             .getSearchParams()
-                    val findTrains = korail.search(searchPayload)
-                            .map { response ->
-                                (response as SearchResponse).train.items
-                                        .map { item -> item.toDomain() }
-                                        .first {train ->
-                                            train.no == it.action.clientExtra["train-no"]
-                                        }
-                            }
+                    val findTrains = korail.findAvailableTrain(
+                            params = searchPayload,
+                            trainNo = it.action.clientExtra["train-no"].toString(),
+                            retryCount = 850
+                    )
 
                     val loginPayload = it.action.params.mapTo<LoginParams>()
                     val loginResult = korail.login(
                             id = loginPayload.id,
                             pw = loginPayload.pw
-                    ).map {response ->
+                    ).map { response ->
                         (response as LoginResponse).toDomain()
                     }
 
@@ -76,7 +74,7 @@ class KakaoSkillHandler(val korail: Korail) {
                         "예약 실패"
                     }
 
-                    val body  = SkillResponse(
+                    val body = SkillResponse(
                             version = "2.0",
                             template = OutPuts(listOf(
                                     SimpleTextTemplate(

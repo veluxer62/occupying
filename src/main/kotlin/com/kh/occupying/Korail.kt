@@ -4,13 +4,15 @@ import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.kh.occupying.domain.Login
 import com.kh.occupying.domain.Train
 import com.kh.occupying.dto.param.SearchParams
-import com.kh.occupying.dto.response.SearchResponse
+import com.kh.occupying.dto.response.CommonResponse
 import com.kh.occupying.dto.response.LoginResponse
 import com.kh.occupying.dto.response.ReservationResponse
-import com.kh.occupying.dto.response.CommonResponse
+import com.kh.occupying.dto.response.SearchResponse
+import com.kh.occupying.exception.TrainSeatIsNotAvailableException
 import org.springframework.web.util.UriBuilder
 import reactor.core.publisher.Mono
 import java.net.URI
+import java.time.Duration
 import java.time.format.DateTimeFormatter
 
 class Korail(private val client: WebClientWrapper) {
@@ -30,6 +32,29 @@ class Korail(private val client: WebClientWrapper) {
     fun search(params: SearchParams): Mono<CommonResponse> {
         val uri = makeSearchUri(params)
         return client.get(uri, jacksonTypeRef<SearchResponse>())
+    }
+
+    fun findAvailableTrain(params: SearchParams,
+                           trainNo: String,
+                           retryCount: Long): Mono<Train> {
+        return this.search(params)
+                .map { response ->
+                    val train = (response as SearchResponse).train.items
+                            .map { item -> item.toDomain() }
+                            .first { train ->
+                                train.no == trainNo
+                            }
+
+                    if (!train.hasSeat())
+                        throw TrainSeatIsNotAvailableException(
+                                "예약가능한 좌석이 존재하지 않습니다.")
+
+                    train
+                }
+                .delaySubscription(Duration.ofSeconds(2))
+                .retry(retryCount) {
+                    it is TrainSeatIsNotAvailableException
+                }
     }
 
     fun reserve(login: Login, train: Train): Mono<CommonResponse> {

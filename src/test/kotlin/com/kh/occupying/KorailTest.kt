@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.core.io.ClassPathResource
 import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
+import java.time.Duration
 import java.time.LocalDate
 import java.util.*
 
@@ -137,5 +138,9 @@ class KorailTest {
         return sut.search(params)
     }
 
+    @Test
+    fun `findAvailableTrain method will return train correctly`() {
+        // TODO https://github.com/square/okhttp/tree/master/mockwebserver
+    }
 }
 
