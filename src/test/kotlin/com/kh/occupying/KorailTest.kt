@@ -4,10 +4,9 @@ import com.kh.occupying.domain.Login
 import com.kh.occupying.domain.SeatCode
 import com.kh.occupying.domain.Train
 import com.kh.occupying.dto.response.*
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.springframework.core.io.ClassPathResource
 import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
@@ -21,7 +20,7 @@ class KorailTest {
     lateinit var client: WebClientWrapper
     lateinit var sut: Korail
 
-    @Before
+    @BeforeEach
     fun setUp() {
         val resource = ClassPathResource("local.properties")
         val prop = Properties()

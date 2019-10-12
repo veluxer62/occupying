@@ -6,7 +6,7 @@ import com.kh.api.response.listCard.ActionType
 import com.kh.occupying.domain.Station
 import com.kh.occupying.dto.response.*
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalTime
 import java.util.*
