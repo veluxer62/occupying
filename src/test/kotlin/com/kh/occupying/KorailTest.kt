@@ -1,7 +1,5 @@
 package com.kh.occupying
 
-import com.kh.occupying.domain.Login
-import com.kh.occupying.domain.SeatCode
 import com.kh.occupying.domain.Station
 import com.kh.occupying.dto.param.SearchParams
 import com.kh.occupying.dto.response.*
@@ -102,8 +100,8 @@ class KorailTest {
                     val train = (it.t2 as SearchResponse)
                             .train.items
                             .map { item -> item.toDomain() }
-                            .first { item ->
-                                item.coachSeatCode == SeatCode.AVAILABLE
+                            .first {train ->
+                                train.hasSeat()
                             }
                     val login = (it.t1 as LoginResponse).toDomain()
 
