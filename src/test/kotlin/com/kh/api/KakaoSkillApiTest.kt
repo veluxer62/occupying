@@ -30,9 +30,9 @@ class KakaoSkillApiTest {
     @Autowired
     private lateinit var korail: Korail
 
-    lateinit var id: String
-    lateinit var pw: String
-    lateinit var departureDate: String
+    private lateinit var id: String
+    private lateinit var pw: String
+    private lateinit var departureDate: String
 
     @BeforeEach
     fun setUp() {
@@ -193,7 +193,6 @@ class KakaoSkillApiTest {
         """.trimIndent()
 
         // Act & Assert
-        val listCardPath = "$.template.outputs[0].carousel"
         webClient.post()
                 .uri("/api/kakao/reserve-train")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -203,7 +202,7 @@ class KakaoSkillApiTest {
                 .expectStatus().isOk
                 .expectBody()
                 .jsonPath("$.version").isEqualTo("2.0")
-                .jsonPath("\$.template.outputs[0].simpleText.text").isNotEmpty
+                .jsonPath("$.template.outputs[0].simpleText.text").isNotEmpty
     }
 
     private fun getTrainNo(): String {
