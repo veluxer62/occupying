@@ -9,9 +9,6 @@ import com.kh.api.response.carousel.CarouselTemplate
 import com.kh.api.response.simpleText.SimpleText
 import com.kh.api.response.simpleText.SimpleTextTemplate
 import com.kh.occupying.Korail
-import com.kh.occupying.domain.Login
-import com.kh.occupying.domain.SeatCode
-import com.kh.occupying.domain.Train
 import com.kh.occupying.dto.response.*
 import com.kh.util.mapTo
 import org.springframework.http.MediaType
@@ -31,9 +28,18 @@ class KakaoSkillHandler(val korail: Korail) {
                             .getSearchParams()
                     korail.search(payload)
                 }.flatMap {
+                    val template = OutPuts(
+                            outputs = listOf(
+                                    CarouselTemplate.fromResponse(it)
+                            )
+                    )
+                    val body = SkillResponse(
+                            version = "2.0",
+                            template = template
+                    )
                     ServerResponse.ok()
                             .contentType(MediaType.APPLICATION_JSON_UTF8)
-                            .syncBody(makeBody(it))
+                            .syncBody(body)
                 }
     }
 
@@ -85,17 +91,4 @@ class KakaoSkillHandler(val korail: Korail) {
                             .syncBody(body)
                 }
     }
-
-    private fun makeBody(it: CommonResponse): SkillResponse<CarouselTemplate> {
-        val template = OutPuts(
-                outputs = listOf(
-                        CarouselTemplate.fromResponse(it)
-                )
-        )
-        return SkillResponse(
-                version = "2.0",
-                template = template
-        )
-    }
-
 }
