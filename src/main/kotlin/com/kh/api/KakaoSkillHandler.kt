@@ -6,11 +6,9 @@ import com.kh.api.request.SkillPayload
 import com.kh.api.response.OutPuts
 import com.kh.api.response.SkillResponse
 import com.kh.api.response.carousel.CarouselTemplate
-import com.kh.api.response.simpleText.SimpleText
 import com.kh.api.response.simpleText.SimpleTextTemplate
 import com.kh.occupying.Korail
 import com.kh.occupying.dto.response.LoginResponse
-import com.kh.occupying.dto.response.ReservationResponse
 import com.kh.util.mapTo
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
@@ -68,21 +66,14 @@ class KakaoSkillHandler(val korail: Korail) {
                 }.flatMap {
                     korail.reserve(it.t1, it.t2)
                 }.flatMap {
-                    val message = if (it is ReservationResponse) {
-                        "예약 성공"
-                    } else {
-                        "예약 실패"
-                    }
-
+                    val template = OutPuts(
+                            outputs = listOf(
+                                    SimpleTextTemplate.fromResponse(it)
+                            )
+                    )
                     val body = SkillResponse(
                             version = "2.0",
-                            template = OutPuts(listOf(
-                                    SimpleTextTemplate(
-                                            simpleText = SimpleText(
-                                                    message
-                                            )
-                                    )
-                            ))
+                            template = template
                     )
                     ServerResponse.ok()
                             .contentType(MediaType.APPLICATION_JSON_UTF8)
