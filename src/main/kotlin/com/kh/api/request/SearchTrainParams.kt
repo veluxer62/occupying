@@ -1,6 +1,7 @@
 package com.kh.api.request
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.kh.occupying.domain.Station
 import com.kh.occupying.dto.param.SearchParams
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -22,8 +23,8 @@ data class SearchTrainParams(
                 )
                 return SearchParams(
                         departureDatetime = departureDateTime,
-                        destinationStation = destinationStation,
-                        departureStation = departureStation
+                        destinationStation = Station.valueOf(destinationStation),
+                        departureStation = Station.valueOf(departureStation)
                 )
         }
 }

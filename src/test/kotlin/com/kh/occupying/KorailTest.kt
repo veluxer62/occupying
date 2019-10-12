@@ -2,6 +2,7 @@ package com.kh.occupying
 
 import com.kh.occupying.domain.Login
 import com.kh.occupying.domain.SeatCode
+import com.kh.occupying.domain.Station
 import com.kh.occupying.domain.Train
 import com.kh.occupying.dto.param.SearchParams
 import com.kh.occupying.dto.response.*
@@ -132,8 +133,8 @@ class KorailTest {
                 departureDatetime = LocalDate.now()
                         .plusDays(1)
                         .atTime(7, 0, 0),
-                departureStation = "서울",
-                destinationStation = "부산"
+                departureStation = Station.서울,
+                destinationStation = Station.부산
         )
 
         return sut.search(params)
