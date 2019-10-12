@@ -12,7 +12,7 @@ data class ListCardTemplate(
         fun fromCommonResponse(response: CommonResponse): ListCardTemplate {
             return if (response is SearchResponse) {
                 val trains = response.train.items
-                        .map { Train.fromDto(it) }
+                        .map { it.toDomain() }
                 ListCardTemplate(
                         listCard = ListCard(
                                 header = Header(

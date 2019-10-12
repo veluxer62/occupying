@@ -1,6 +1,5 @@
 package com.kh.occupying.domain
 
-import com.kh.occupying.dto.response.Train as Dto
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -19,36 +18,4 @@ data class Train(
         val coachSeatCode: SeatCode,
         val passenger: Passenger,
         val fee: Int
-) {
-    companion object {
-        fun fromDto(dto: Dto): Train {
-            return Train(
-                    no = dto.trnNo,
-                    trainGroup = dto.trnGpCd,
-                    trainClass = TrainClass.values()
-                            .first { it.code == dto.trainClassCode },
-                    runDate = dto.runDate,
-                    departureDate = dto.departureDate,
-                    departureTime = dto.departureTime,
-                    departureStation = Station.values()
-                            .first { it.code == dto.departureStationCode },
-                    arrivalDate = dto.arrivalDate,
-                    arrivalTime = dto.arrivalTime,
-                    destinationStation = Station.values()
-                            .first { it.code == dto.destinationCode },
-                    seatClass = "1",
-                    coachSeatCode = when(dto.genRsvCd) {
-                        "00" -> SeatCode.NONE
-                        "11" -> SeatCode.AVAILABLE
-                        else -> SeatCode.SOLD_OUT
-                    },
-                    passenger = Passenger(
-                            type = "1",
-                            headCount = 1,
-                            discount = Discount()
-                    ),
-                    fee = dto.rcvdAmt.toInt()
-            )
-        }
-    }
-}
+)

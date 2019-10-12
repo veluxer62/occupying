@@ -46,7 +46,7 @@ class KakaoSkillHandler(val korail: Korail) {
                     val findTrains = korail.search(searchPayload)
                             .map { response ->
                                 (response as SearchResponse).train.items
-                                        .map { item -> Train.fromDto(item) }
+                                        .map { item -> item.toDomain() }
                                         .first {train ->
                                             train.no == it.action.clientExtra["train-no"]
                                         }

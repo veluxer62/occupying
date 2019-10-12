@@ -213,7 +213,7 @@ class KakaoSkillApiTest {
                 .getSearchParams()
         return korail.search(payload).map {
             (it as SearchResponse).train.items
-                    .map { response -> Train.fromDto(response) }
+                    .map { response -> response.toDomain() }
                     .first()
                     .no
         }.block()!!

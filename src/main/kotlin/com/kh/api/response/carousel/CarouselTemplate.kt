@@ -1,6 +1,5 @@
 package com.kh.api.response.carousel
 
-import com.kh.occupying.domain.Train
 import com.kh.occupying.dto.response.CommonResponse
 import com.kh.occupying.dto.response.SearchResponse
 
@@ -23,7 +22,7 @@ data class CarouselTemplate(
 
         private fun makeCarouselTemplate(response: SearchResponse): List<BasicCard> {
             return response.train.items.map {
-                BasicCard.fromTrain(Train.fromDto(it))
+                BasicCard.fromTrain(it.toDomain())
             }
         }
     }

@@ -3,7 +3,6 @@ package com.kh.occupying
 import com.kh.occupying.domain.Login
 import com.kh.occupying.domain.SeatCode
 import com.kh.occupying.domain.Station
-import com.kh.occupying.domain.Train
 import com.kh.occupying.dto.param.SearchParams
 import com.kh.occupying.dto.response.*
 import org.assertj.core.api.Assertions.assertThat
@@ -102,7 +101,7 @@ class KorailTest {
                 .flatMap {
                     val train = (it.t2 as SearchResponse)
                             .train.items
-                            .map { item -> Train.fromDto(item) }
+                            .map { item -> item.toDomain() }
                             .first { item ->
                                 item.coachSeatCode == SeatCode.AVAILABLE
                             }

@@ -3,6 +3,8 @@ package com.kh.occupying.dto.response
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.kh.occupying.domain.*
+import com.kh.occupying.domain.Train
 import com.kh.util.LocalDateDeserializer
 import com.kh.util.LocalTimeDeserializer
 import java.time.LocalDate
@@ -173,4 +175,34 @@ data class Train(
         val trainClassName: String,
         @JsonProperty("h_trn_gp_nm")
         val trnGpNm: String
-)
+) {
+        fun toDomain(): Train {
+                return Train(
+                        no = trnNo,
+                        trainGroup = trnGpCd,
+                        trainClass = TrainClass.values()
+                                .first { it.code == trainClassCode },
+                        runDate = runDate,
+                        departureDate = departureDate,
+                        departureTime = departureTime,
+                        departureStation = Station.values()
+                                .first { it.code == departureStationCode },
+                        arrivalDate = arrivalDate,
+                        arrivalTime = arrivalTime,
+                        destinationStation = Station.values()
+                                .first { it.code == destinationCode },
+                        seatClass = "1",
+                        coachSeatCode = when(genRsvCd) {
+                                "00" -> SeatCode.NONE
+                                "11" -> SeatCode.AVAILABLE
+                                else -> SeatCode.SOLD_OUT
+                        },
+                        passenger = Passenger(
+                                type = "1",
+                                headCount = 1,
+                                discount = Discount()
+                        ),
+                        fee = rcvdAmt.toInt()
+                )
+        }
+}
