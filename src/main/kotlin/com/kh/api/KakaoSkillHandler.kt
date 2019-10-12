@@ -57,7 +57,7 @@ class KakaoSkillHandler(val korail: Korail) {
                             id = loginPayload.id,
                             pw = loginPayload.pw
                     ).map {response ->
-                        Login.fromDto(response as LoginResponse)
+                        (response as LoginResponse).toDomain()
                     }
 
                     Mono.zip(loginResult, findTrains)

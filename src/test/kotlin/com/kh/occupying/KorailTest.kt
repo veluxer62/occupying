@@ -105,7 +105,7 @@ class KorailTest {
                             .first { item ->
                                 item.coachSeatCode == SeatCode.AVAILABLE
                             }
-                    val login = Login.fromDto(it.t1 as LoginResponse)
+                    val login = (it.t1 as LoginResponse).toDomain()
 
                     sut.reserve(login, train)
                 }

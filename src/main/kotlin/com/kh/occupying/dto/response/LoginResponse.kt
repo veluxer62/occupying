@@ -1,6 +1,7 @@
 package com.kh.occupying.dto.response
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.kh.occupying.domain.Login
 
 data class LoginResponse(
         @JsonProperty("h_msg_txt")
@@ -76,4 +77,11 @@ data class LoginResponse(
         @JsonProperty("strGoffStnCd")
         val strGoffStnCd: String,
         val cookie: List<String>?
-) : CommonResponse
+) : CommonResponse {
+    fun toDomain(): Login {
+        return Login(
+                key = key,
+                cookie = cookie ?: listOf()
+        )
+    }
+}
