@@ -1,5 +1,12 @@
 package com.kh.api
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.kh.api.request.SearchTrainParams
+import com.kh.api.request.SkillPayload
+import com.kh.occupying.Korail
+import com.kh.occupying.domain.Train
+import com.kh.occupying.dto.response.SearchResponse
+import com.kh.util.mapTo
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,8 +27,12 @@ class KakaoSkillApiTest {
     @Autowired
     private lateinit var webClient: WebTestClient
 
+    @Autowired
+    private lateinit var korail: Korail
+
     lateinit var id: String
     lateinit var pw: String
+    lateinit var departureDate: String
 
     @BeforeEach
     fun setUp() {
@@ -30,75 +41,15 @@ class KakaoSkillApiTest {
         prop.load(resource.inputStream)
         id = prop.getProperty("id")
         pw = prop.getProperty("pw")
+
+        departureDate = LocalDate.now().plusDays(1)
+                .format(DateTimeFormatter.ofPattern("yyyyMMdd"))
     }
 
     @Test
     fun `test find trains`() {
         // Arrange
-        val departureDate = LocalDate.now().plusDays(1)
-                .format(DateTimeFormatter.ofPattern("yyyyMMdd"))
-        val body = """
-            {
-              "intent": {
-                "id": "d7coyklcoly0q5lhjh6zdjzd",
-                "name": "블록 이름"
-              },
-              "userRequest": {
-                "timezone": "Asia/Seoul",
-                "params": {
-                  "ignoreMe": "true"
-                },
-                "block": {
-                  "id": "d7coyklcoly0q5lhjh6zdjzd",
-                  "name": "블록 이름"
-                },
-                "utterance": "발화 내용",
-                "lang": null,
-                "user": {
-                  "id": "515520",
-                  "type": "accountId",
-                  "properties": {}
-                }
-              },
-              "bot": {
-                "id": "5d97076fb617ea00012af4e0",
-                "name": "봇 이름"
-              },
-              "action": {
-                "name": "g0xxzoae15",
-                "clientExtra": null,
-                "params": {
-                  "departure-date": "$departureDate",
-                  "departure-time": "070000",
-                  "departure-station": "서울",
-                  "destination": "부산"
-                },
-                "id": "krcu052b90c6angense4fxgy",
-                "detailParams": {
-                  "departure-date": {
-                    "origin": "$departureDate",
-                    "value": "$departureDate",
-                    "groupName": ""
-                  },
-                  "departure-time": {
-                    "origin": "070000",
-                    "value": "070000",
-                    "groupName": ""
-                  },
-                  "departure-station": {
-                    "origin": "서울",
-                    "value": "서울",
-                    "groupName": ""
-                  },
-                  "destination": {
-                    "origin": "부산",
-                    "value": "부산",
-                    "groupName": ""
-                  }
-                }
-              }
-            }
-        """.trimIndent()
+        val body = findTrainBody()
 
         // Act & Assert
         val listCardPath = "$.template.outputs[0].carousel"
@@ -115,11 +66,75 @@ class KakaoSkillApiTest {
                 .jsonPath("$listCardPath.items").isArray
     }
 
+    private fun findTrainBody(): String {
+        return """
+                {
+                  "intent": {
+                    "id": "d7coyklcoly0q5lhjh6zdjzd",
+                    "name": "블록 이름"
+                  },
+                  "userRequest": {
+                    "timezone": "Asia/Seoul",
+                    "params": {
+                      "ignoreMe": "true"
+                    },
+                    "block": {
+                      "id": "d7coyklcoly0q5lhjh6zdjzd",
+                      "name": "블록 이름"
+                    },
+                    "utterance": "발화 내용",
+                    "lang": null,
+                    "user": {
+                      "id": "515520",
+                      "type": "accountId",
+                      "properties": {}
+                    }
+                  },
+                  "bot": {
+                    "id": "5d97076fb617ea00012af4e0",
+                    "name": "봇 이름"
+                  },
+                  "action": {
+                    "name": "g0xxzoae15",
+                    "clientExtra": null,
+                    "params": {
+                      "departure-date": "$departureDate",
+                      "departure-time": "070000",
+                      "departure-station": "서울",
+                      "destination-station": "부산"
+                    },
+                    "id": "krcu052b90c6angense4fxgy",
+                    "detailParams": {
+                      "departure-date": {
+                        "origin": "$departureDate",
+                        "value": "$departureDate",
+                        "groupName": ""
+                      },
+                      "departure-time": {
+                        "origin": "070000",
+                        "value": "070000",
+                        "groupName": ""
+                      },
+                      "departure-station": {
+                        "origin": "서울",
+                        "value": "서울",
+                        "groupName": ""
+                      },
+                      "destination-station": {
+                        "origin": "부산",
+                        "value": "부산",
+                        "groupName": ""
+                      }
+                    }
+                  }
+                }
+            """.trimIndent()
+    }
+
     @Test
     fun `test reserve train`() {
         // Arrange
-        val departureDate = LocalDate.now().plusDays(1)
-                .format(DateTimeFormatter.ofPattern("yyyyMMdd"))
+        val trainNo = getTrainNo()
         val body = """
             {
                 "intent": {
@@ -152,7 +167,7 @@ class KakaoSkillApiTest {
                     "clientExtra": {
                         "departure-time": "070000",
                         "departure-date": "$departureDate",
-                        "train-no": "109",
+                        "train-no": "$trainNo",
                         "destination-station": "부산",
                         "departure-station": "서울"
                     },
@@ -189,5 +204,19 @@ class KakaoSkillApiTest {
                 .expectBody()
                 .jsonPath("$.version").isEqualTo("2.0")
                 .jsonPath("\$.template.outputs[0].simpleText.text").isNotEmpty
+    }
+
+    private fun getTrainNo(): String {
+        val request = jacksonObjectMapper()
+                .readValue(findTrainBody(), SkillPayload::class.java)
+        val payload = request.action.params
+                .mapTo<SearchTrainParams>()
+                .getSearchParams()
+        return korail.search(payload).map {
+            (it as SearchResponse).train.items
+                    .map { response -> Train.fromDto(response) }
+                    .first()
+                    .no
+        }.block()!!
     }
 }

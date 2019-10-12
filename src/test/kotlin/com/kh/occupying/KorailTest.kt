@@ -3,6 +3,7 @@ package com.kh.occupying
 import com.kh.occupying.domain.Login
 import com.kh.occupying.domain.SeatCode
 import com.kh.occupying.domain.Train
+import com.kh.occupying.dto.param.SearchParams
 import com.kh.occupying.dto.response.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -127,17 +128,15 @@ class KorailTest {
     }
 
     private fun searchTrain(): Mono<CommonResponse> {
-        val departureAt = LocalDate.now()
-                .plusDays(1)
-                .atTime(7, 0, 0)
-        val departureStation = "서울"
-        val destination = "부산"
-
-        return sut.search(
-                departureAt,
-                departureStation,
-                destination
+        val params = SearchParams(
+                departureDatetime = LocalDate.now()
+                        .plusDays(1)
+                        .atTime(7, 0, 0),
+                departureStation = "서울",
+                destinationStation = "부산"
         )
+
+        return sut.search(params)
     }
 
 }

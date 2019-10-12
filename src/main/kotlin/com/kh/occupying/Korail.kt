@@ -3,6 +3,7 @@ package com.kh.occupying
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.kh.occupying.domain.Login
 import com.kh.occupying.domain.Train
+import com.kh.occupying.dto.param.SearchParams
 import com.kh.occupying.dto.response.SearchResponse
 import com.kh.occupying.dto.response.LoginResponse
 import com.kh.occupying.dto.response.ReservationResponse
@@ -10,7 +11,6 @@ import com.kh.occupying.dto.response.CommonResponse
 import org.springframework.web.util.UriBuilder
 import reactor.core.publisher.Mono
 import java.net.URI
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class Korail(private val client: WebClientWrapper) {
@@ -27,11 +27,8 @@ class Korail(private val client: WebClientWrapper) {
                 }
     }
 
-    fun search(departureAt: LocalDateTime,
-               departureStation: String,
-               destination: String): Mono<CommonResponse> {
-        val uri = makeSearchUri(departureAt,
-                destination, departureStation)
+    fun search(params: SearchParams): Mono<CommonResponse> {
+        val uri = makeSearchUri(params)
         return client.get(uri, jacksonTypeRef<SearchResponse>())
     }
 
@@ -98,12 +95,10 @@ class Korail(private val client: WebClientWrapper) {
         }
     }
 
-    private fun makeSearchUri(departureAt: LocalDateTime,
-                              destination: String,
-                              departureStation: String): (UriBuilder) -> URI {
-        val departureDate = departureAt
+    private fun makeSearchUri(params: SearchParams): (UriBuilder) -> URI {
+        val departureDate = params.departureDatetime
                 .format(DateTimeFormatter.ofPattern("yyyyMMdd"))
-        val departureTime = departureAt
+        val departureTime = params.departureDatetime
                 .format(DateTimeFormatter.ofPattern("HHmmss"))
 
         return {
@@ -115,9 +110,9 @@ class Korail(private val client: WebClientWrapper) {
                     .queryParam("txtCardPsgCnt", "0")
                     .queryParam("txtGdNo", "")
                     .queryParam("txtGoAbrdDt", departureDate)
-                    .queryParam("txtGoEnd", destination)
+                    .queryParam("txtGoEnd", params.destinationStation)
                     .queryParam("txtGoHour", departureTime)
-                    .queryParam("txtGoStart", departureStation)
+                    .queryParam("txtGoStart", params.departureStation)
                     .queryParam("txtJobDv", "")
                     .queryParam("txtMenuId", "11")
                     .queryParam("txtPsgFlg_1", "1")

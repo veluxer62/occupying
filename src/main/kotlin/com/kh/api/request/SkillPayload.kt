@@ -4,5 +4,5 @@ data class SkillPayload(
         val intent: Intent,
         val userRequest: UserRequest,
         val bot: Bot,
-        val action: Action
+        val action: Payload
 )

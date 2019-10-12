@@ -1,9 +1,9 @@
 package com.kh.api.request
 
-data class Action(
+data class Payload(
         val name: String,
         val clientExtra: Map<String, Any>?,
-        val params: Params,
+        val params: Map<String, Any>,
         val id: String,
         val detailParams: Map<String, DetailParam>
 )

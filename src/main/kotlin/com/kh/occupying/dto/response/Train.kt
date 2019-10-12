@@ -3,8 +3,8 @@ package com.kh.occupying.dto.response
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.kh.occupying.converter.LocalDateDeserializer
-import com.kh.occupying.converter.LocalTimeDeserializer
+import com.kh.util.LocalDateDeserializer
+import com.kh.util.LocalTimeDeserializer
 import java.time.LocalDate
 import java.time.LocalTime
 

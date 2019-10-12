@@ -1,4 +1,4 @@
-package com.kh.occupying.converter
+package com.kh.util
 
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
