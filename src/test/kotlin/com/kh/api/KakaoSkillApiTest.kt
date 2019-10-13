@@ -8,7 +8,9 @@ import com.kh.occupying.domain.Train
 import com.kh.occupying.dto.response.SearchResponse
 import com.kh.util.mapTo
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
+import org.junit.platform.commons.annotation.Testable
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.context.annotation.Import
@@ -16,6 +18,7 @@ import org.springframework.core.io.ClassPathResource
 import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.reactive.function.BodyInserters
+import java.time.Duration
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -132,6 +135,9 @@ class KakaoSkillApiTest {
     }
 
     @Test
+    @Disabled("""
+        매진인 경우 테스트 성공시까지 시간이 오래 소요되므로 메뉴얼로만 테스트를 실행한다.
+    """)
     fun `test reserve train`() {
         // Arrange
         val trainNo = getTrainNo()
@@ -193,6 +199,9 @@ class KakaoSkillApiTest {
         """.trimIndent()
 
         // Act & Assert
+        webClient = webClient.mutate()
+                .responseTimeout(Duration.ofSeconds(30 * 60))
+                .build()
         webClient.post()
                 .uri("/api/kakao/reserve-train")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
