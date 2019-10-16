@@ -3,13 +3,12 @@ package com.kh.occupying
 import com.kh.occupying.domain.Station
 import com.kh.occupying.dto.param.SearchParams
 import com.kh.occupying.dto.response.*
+import com.kh.util.SecretProperties
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.core.io.ClassPathResource
 import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
-import java.time.Duration
 import java.time.LocalDate
 import java.util.*
 
@@ -22,11 +21,9 @@ class KorailTest {
 
     @BeforeEach
     fun setUp() {
-        val resource = ClassPathResource("local.properties")
-        val prop = Properties()
-        prop.load(resource.inputStream)
-        id = prop.getProperty("id")
-        pw = prop.getProperty("pw")
+        val secretProperties = SecretProperties()
+        id = secretProperties.korail.id
+        pw = secretProperties.korail.pw
         client = WebClientWrapper(KorailProperties())
         sut = Korail(client)
     }

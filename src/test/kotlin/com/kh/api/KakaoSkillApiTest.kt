@@ -6,6 +6,7 @@ import com.kh.api.request.SkillPayload
 import com.kh.occupying.Korail
 import com.kh.occupying.domain.Train
 import com.kh.occupying.dto.response.SearchResponse
+import com.kh.util.SecretProperties
 import com.kh.util.mapTo
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Disabled
@@ -39,11 +40,9 @@ class KakaoSkillApiTest {
 
     @BeforeEach
     fun setUp() {
-        val resource = ClassPathResource("local.properties")
-        val prop = Properties()
-        prop.load(resource.inputStream)
-        id = prop.getProperty("id")
-        pw = prop.getProperty("pw")
+        val secretProperties = SecretProperties()
+        id = secretProperties.korail.id
+        pw = secretProperties.korail.pw
 
         departureDate = LocalDate.now().plusDays(1)
                 .format(DateTimeFormatter.ofPattern("yyyyMMdd"))

@@ -14,6 +14,18 @@ Korail API는 [korail2](https://github.com/carpedm20/korail2)를 참고하여 �
 챗봇으로 [카카오 오픈빌더](https://i.kakao.com/openbuilder)를 사용하였습니다.<br />
 자세한 내용은 카카오에서 제공하는 [도움말](https://i.kakao.com/docs/getting-started-overview#%EC%98%A4%ED%94%88%EB%B9%8C%EB%8D%94-%EC%86%8C%EA%B0%9C)을 참고하시기 바랍니다.
 
+## Perparation
+### `secret.yml` 파일 생성
+`**/src/main/resources/`에 `secret.yml` 파일을 생성합니다.<br/>
+해당 파일을 생성하지 않으면 서비스가 정상 동작하지 않습니다.
+```
+korail:
+  id: {코레일계정}
+  pw: {코레일비밀번호}
+email:
+  id: {이메일계정}
+  pw: {이메일비밀번호}
+```
 
 ## Installing
 ### `./gradlew build`
@@ -22,10 +34,3 @@ Korail API는 [korail2](https://github.com/carpedm20/korail2)를 참고하여 �
 ### `java -jar build/lib/occupying-0.1.0.jar`
 서비스를 실행합니다.
 
-## For testing
-### `local.properties` 파일 생성
-테스트를 위해서 `**/src/test/resources/`에 `local.properties` 파일을 생성합니다.
-```
-   id={코레일계정}
-   pw={코레일비밀번호}
-```
