@@ -51,7 +51,7 @@ class Korail(private val client: WebClientWrapper) {
 
                     train
                 }
-                .delaySubscription(Duration.ofSeconds(2))
+                .delaySubscription(Duration.ofSeconds(1))
                 .retry(retryCount) {
                     it is TrainSeatIsNotAvailableException
                 }
