@@ -4,28 +4,24 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.kh.api.request.SearchTrainParams
 import com.kh.api.request.SkillPayload
 import com.kh.occupying.Korail
-import com.kh.occupying.domain.Train
 import com.kh.occupying.dto.response.SearchResponse
 import com.kh.util.SecretProperties
 import com.kh.util.mapTo
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import org.junit.platform.commons.annotation.Testable
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.context.annotation.Import
-import org.springframework.core.io.ClassPathResource
 import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.reactive.function.BodyInserters
 import java.time.Duration
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 @WebFluxTest
-@Import(value = [KakaoSkillHandler::class, Config::class])
+@Import(value = [KakaoSkillHandler::class, AppConfig::class])
 class KakaoSkillApiTest {
 
     @Autowired

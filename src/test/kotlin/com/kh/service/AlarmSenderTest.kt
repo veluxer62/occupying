@@ -1,6 +1,6 @@
 package com.kh.service
 
-import com.kh.api.Config
+import com.kh.api.AppConfig
 import com.kh.util.GmailReader
 import com.kh.util.SecretProperties
 import org.assertj.core.api.Assertions.assertThat
@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import javax.mail.Message
 
-@SpringBootTest(classes = [Config::class])
+@SpringBootTest(classes = [AppConfig::class])
 internal class AlarmSenderTest {
 
     @Autowired

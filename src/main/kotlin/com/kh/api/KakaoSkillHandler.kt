@@ -1,23 +1,29 @@
 package com.kh.api
 
-import com.kh.api.request.LoginParams
 import com.kh.api.request.SearchTrainParams
 import com.kh.api.request.SkillPayload
 import com.kh.api.response.OutPuts
 import com.kh.api.response.SkillResponse
 import com.kh.api.response.carousel.CarouselTemplate
+import com.kh.api.response.simpleText.SimpleText
 import com.kh.api.response.simpleText.SimpleTextTemplate
 import com.kh.occupying.Korail
-import com.kh.occupying.dto.response.LoginResponse
+import com.kh.service.AlarmSender
+import com.kh.service.BackgroundExecutor
 import com.kh.util.mapTo
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
 import reactor.core.publisher.Mono
+import reactor.core.scheduler.Schedulers
 
 @Component
-class KakaoSkillHandler(val korail: Korail) {
+class KakaoSkillHandler(
+        private val korail: Korail,
+        private val alarmSender: AlarmSender,
+        private val backgroundExecutor: BackgroundExecutor
+) {
 
     fun findTrains(req: ServerRequest): Mono<ServerResponse> {
         return req.bodyToMono(SkillPayload::class.java)
@@ -44,31 +50,15 @@ class KakaoSkillHandler(val korail: Korail) {
 
     fun reserveTrain(req: ServerRequest): Mono<ServerResponse> {
         return req.bodyToMono(SkillPayload::class.java)
+                .doOnNext {
+                    backgroundExecutor.reserveTrain(it)
+                }
                 .flatMap {
-                    val searchPayload = it.action.clientExtra!!
-                            .mapTo<SearchTrainParams>()
-                            .getSearchParams()
-                    val findTrains = korail.findAvailableTrain(
-                            params = searchPayload,
-                            trainNo = it.action.clientExtra["train-no"].toString(),
-                            retryCount = 850
-                    )
-
-                    val loginPayload = it.action.params.mapTo<LoginParams>()
-                    val loginResult = korail.login(
-                            id = loginPayload.id,
-                            pw = loginPayload.pw
-                    ).map { response ->
-                        (response as LoginResponse).toDomain()
-                    }
-
-                    Mono.zip(loginResult, findTrains)
-                }.flatMap {
-                    korail.reserve(it.t1, it.t2)
-                }.flatMap {
                     val template = OutPuts(
                             outputs = listOf(
-                                    SimpleTextTemplate.fromResponse(it)
+                                    SimpleTextTemplate(
+                                            SimpleText("예약 신청했습니다.")
+                                    )
                             )
                     )
                     val body = SkillResponse(
@@ -79,5 +69,6 @@ class KakaoSkillHandler(val korail: Korail) {
                             .contentType(MediaType.APPLICATION_JSON_UTF8)
                             .syncBody(body)
                 }
+                .subscribeOn(Schedulers.elastic())
     }
 }
