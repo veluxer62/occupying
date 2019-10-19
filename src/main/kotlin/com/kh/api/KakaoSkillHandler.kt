@@ -45,6 +45,24 @@ class KakaoSkillHandler(
                     ServerResponse.ok()
                             .contentType(MediaType.APPLICATION_JSON_UTF8)
                             .syncBody(body)
+                }.onErrorResume {
+                    val template = OutPuts(
+                            outputs = listOf(
+                                    SimpleTextTemplate(
+                                            SimpleText("""
+                                                ${it.cause?.message.orEmpty()}
+                                                열차 조회를 다시 해주시기 바랍니다.
+                                            """.trimIndent())
+                                    )
+                            )
+                    )
+                    val body = SkillResponse(
+                            version = "2.0",
+                            template = template
+                    )
+                    ServerResponse.ok()
+                            .contentType(MediaType.APPLICATION_JSON_UTF8)
+                            .syncBody(body)
                 }
     }
 

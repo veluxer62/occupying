@@ -5,5 +5,5 @@ data class Payload(
         val clientExtra: Map<String, Any>?,
         val params: Map<String, Any>,
         val id: String,
-        val detailParams: Map<String, DetailParam>
+        val detailParams: Map<String, DetailParam>?
 )

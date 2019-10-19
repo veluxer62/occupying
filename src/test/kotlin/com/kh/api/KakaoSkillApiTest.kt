@@ -8,9 +8,14 @@ import com.kh.occupying.Korail
 import com.kh.occupying.dto.response.SearchResponse
 import com.kh.util.SecretProperties
 import com.kh.util.mapTo
+import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.MethodSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.context.annotation.Import
@@ -20,6 +25,8 @@ import org.springframework.web.reactive.function.BodyInserters
 import java.time.Duration
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.*
+import java.util.stream.Stream
 
 @WebFluxTest
 @Import(value = [KakaoSkillHandler::class, AppConfig::class])
@@ -50,7 +57,12 @@ class KakaoSkillApiTest {
     @Test
     fun `test find trains`() {
         // Arrange
-        val body = findTrainBody()
+        val body = findTrainBody(
+                departureDate = departureDate,
+                departureTime = "070000",
+                departureStation = "서울",
+                destinationStation = "부산"
+        )
 
         // Act & Assert
         val listCardPath = "$.template.outputs[0].carousel"
@@ -67,7 +79,57 @@ class KakaoSkillApiTest {
                 .jsonPath("$listCardPath.items").isArray
     }
 
-    private fun findTrainBody(): String {
+    companion object {
+        @JvmStatic
+        fun initFindTrainsData(): Stream<Arguments> {
+            val departureDate = LocalDate.now().plusDays(1)
+                    .format(DateTimeFormatter.ofPattern("yyyyMMdd"))
+            return Stream.of(
+                    Arguments.of(UUID.randomUUID().toString(), "070000", "서울", "부산", "출발일"),
+                    Arguments.of(departureDate, UUID.randomUUID().toString(), "서울", "부산", "출발시간"),
+                    Arguments.of(departureDate, "070000", UUID.randomUUID().toString(), "부산", "출발역"),
+                    Arguments.of(departureDate, "070000", "서울", UUID.randomUUID().toString(), "도착역")
+            )
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("initFindTrainsData")
+    fun `given wrong request find trains will return body correctly`(
+            departureDate: String, departureTime: String,
+            departureStation: String, destinationStation: String,
+            expected: String
+    ) {
+        // Arrange
+        val body = findTrainBody(
+                departureDate = departureDate,
+                departureTime = departureTime,
+                departureStation = departureStation,
+                destinationStation = destinationStation
+        )
+
+        // Act & Assert
+        webClient.post()
+                .uri("/api/kakao/find-trains")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .body(BodyInserters.fromObject(body))
+                .exchange()
+                .expectStatus().isOk
+                .expectBody()
+                .jsonPath("$.version").isEqualTo("2.0")
+                .jsonPath("$.template.outputs[0].simpleText.text").isNotEmpty
+                .jsonPath("$.template.outputs[0].simpleText.text").value<String> {
+                    assertThat(it).contains(expected)
+                }
+    }
+
+    private fun findTrainBody(
+            departureDate: String,
+            departureTime: String,
+            departureStation: String,
+            destinationStation: String
+    ): String {
         return """
                 {
                   "intent": {
@@ -100,33 +162,11 @@ class KakaoSkillApiTest {
                     "clientExtra": null,
                     "params": {
                       "departure-date": "$departureDate",
-                      "departure-time": "070000",
-                      "departure-station": "서울",
-                      "destination-station": "부산"
+                      "departure-time": "$departureTime",
+                      "departure-station": "$departureStation",
+                      "destination-station": "$destinationStation"
                     },
-                    "id": "krcu052b90c6angense4fxgy",
-                    "detailParams": {
-                      "departure-date": {
-                        "origin": "$departureDate",
-                        "value": "$departureDate",
-                        "groupName": ""
-                      },
-                      "departure-time": {
-                        "origin": "070000",
-                        "value": "070000",
-                        "groupName": ""
-                      },
-                      "departure-station": {
-                        "origin": "서울",
-                        "value": "서울",
-                        "groupName": ""
-                      },
-                      "destination-station": {
-                        "origin": "부산",
-                        "value": "부산",
-                        "groupName": ""
-                      }
-                    }
+                    "id": "krcu052b90c6angense4fxgy"
                   }
                 }
             """.trimIndent()
@@ -220,7 +260,12 @@ class KakaoSkillApiTest {
 
     private fun getTrainNo(): String {
         val request = jacksonObjectMapper()
-                .readValue(findTrainBody(), SkillPayload::class.java)
+                .readValue(findTrainBody(
+                        departureDate = departureDate,
+                        departureTime = "070000",
+                        departureStation = "서울",
+                        destinationStation = "부산"
+                ), SkillPayload::class.java)
         val payload = request.action.params
                 .mapTo<SearchTrainParams>()
                 .getSearchParams()
