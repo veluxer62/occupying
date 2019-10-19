@@ -57,7 +57,12 @@ class KakaoSkillHandler(
                     val template = OutPuts(
                             outputs = listOf(
                                     SimpleTextTemplate(
-                                            SimpleText("예약 신청했습니다.")
+                                            SimpleText("""
+                                                예약 신청하였습니다.
+                                                예약 신청에 대한 결과는 입력하신 메일로 발송될 예정입니다.
+                                                매진 예약인 경우 최대 30분 동안 예약 시도하며
+                                                좌석 상황에 따라 예약이 성공하지 못할 수 있습니다.
+                                            """.trimIndent())
                                     )
                             )
                     )
