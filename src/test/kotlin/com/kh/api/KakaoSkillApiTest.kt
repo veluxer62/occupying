@@ -132,9 +132,9 @@ class KakaoSkillApiTest {
     }
 
     @Test
-//    @Disabled("""
-//        매진인 경우 테스트 성공시까지 시간이 오래 소요되므로 메뉴얼로만 테스트를 실행한다.
-//    """)
+    @Disabled("""
+        매진인 경우 테스트 성공시까지 시간이 오래 소요되므로 메뉴얼로만 테스트를 실행한다.
+    """)
     fun `test reserve train`() {
         // Arrange
         val trainNo = getTrainNo()
