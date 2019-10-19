@@ -1,7 +1,8 @@
 package com.kh.service
 
-import com.kh.api.AppConfig
-import com.kh.util.GmailReader
+import com.kh.api.config.AppConfig
+import com.kh.util.mail.MailReader
+import com.kh.util.mail.NaverMailReader
 import com.kh.util.SecretProperties
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -16,11 +17,14 @@ internal class AlarmSenderTest {
     @Autowired
     lateinit var alarmSender: AlarmSender
 
+    lateinit var mailReader: MailReader
+
     lateinit var secret: SecretProperties
 
     @BeforeEach
     internal fun setUp() {
         secret = SecretProperties()
+        mailReader = NaverMailReader(secret.email.id, secret.email.pw)
     }
 
     @Test
@@ -58,7 +62,6 @@ internal class AlarmSenderTest {
     }
 
     private fun readMessages(): Array<Message> {
-        val mailReader = GmailReader(secret.email.id, secret.email.pw)
         return mailReader.getMessages()
     }
 

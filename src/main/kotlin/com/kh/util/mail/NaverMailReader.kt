@@ -1,4 +1,4 @@
-package com.kh.util
+package com.kh.util.mail
 
 import java.util.*
 import javax.mail.Folder
@@ -6,7 +6,7 @@ import javax.mail.Message
 import javax.mail.Session
 import javax.mail.Store
 
-class GmailReader(id: String, pw: String) {
+class NaverMailReader(id: String, pw: String) : MailReader {
 
     private lateinit var store: Store
     private lateinit var session: Session
@@ -18,16 +18,16 @@ class GmailReader(id: String, pw: String) {
 
     private fun setSession() {
         val properties = Properties()
-        properties.setProperty("mail.imap.ssl.enable", "true");
+        properties.setProperty("mail.imap.ssl.enable", "true")
         session = Session.getDefaultInstance(properties, null)
     }
 
     private fun connect(id: String, pw: String) {
         store = session.getStore("imap")
-        store.connect("imap.gmail.com", 993, id, pw)
+        store.connect("imap.naver.com", 993, id, pw)
     }
 
-    fun getMessages(): Array<Message> {
+    override fun getMessages(): Array<Message> {
         val folder = store.getFolder("INBOX")
 
         if (!folder.isOpen)

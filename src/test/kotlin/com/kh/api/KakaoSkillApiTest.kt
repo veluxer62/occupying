@@ -1,6 +1,7 @@
 package com.kh.api
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.kh.api.config.AppConfig
 import com.kh.api.request.SearchTrainParams
 import com.kh.api.request.SkillPayload
 import com.kh.occupying.Korail
