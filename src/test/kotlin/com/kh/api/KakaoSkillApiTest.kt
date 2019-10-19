@@ -33,12 +33,14 @@ class KakaoSkillApiTest {
     private lateinit var id: String
     private lateinit var pw: String
     private lateinit var departureDate: String
+    private lateinit var email: String
 
     @BeforeEach
     fun setUp() {
         val secretProperties = SecretProperties()
         id = secretProperties.korail.id
         pw = secretProperties.korail.pw
+        email = secretProperties.email.id
 
         departureDate = LocalDate.now().plusDays(1)
                 .format(DateTimeFormatter.ofPattern("yyyyMMdd"))
@@ -130,9 +132,9 @@ class KakaoSkillApiTest {
     }
 
     @Test
-    @Disabled("""
-        매진인 경우 테스트 성공시까지 시간이 오래 소요되므로 메뉴얼로만 테스트를 실행한다.
-    """)
+//    @Disabled("""
+//        매진인 경우 테스트 성공시까지 시간이 오래 소요되므로 메뉴얼로만 테스트를 실행한다.
+//    """)
     fun `test reserve train`() {
         // Arrange
         val trainNo = getTrainNo()
@@ -174,7 +176,8 @@ class KakaoSkillApiTest {
                     },
                     "params": {
                         "id": "$id",
-                        "pw": "$pw"
+                        "pw": "$pw",
+                        "email": "$email"
                     },
                     "id": "5d9dc807ffa7480001dace7e",
                     "detailParams": {
@@ -186,6 +189,11 @@ class KakaoSkillApiTest {
                         "pw": {
                             "origin": "$pw",
                             "value": "$pw",
+                            "groupName": ""
+                        },
+                        "email": {
+                            "origin": "$email",
+                            "value": "$email",
                             "groupName": ""
                         }
                     }

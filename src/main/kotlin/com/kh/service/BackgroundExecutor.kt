@@ -1,6 +1,6 @@
 package com.kh.service
 
-import com.kh.api.request.LoginParams
+import com.kh.api.request.ReservationParams
 import com.kh.api.request.SearchTrainParams
 import com.kh.api.request.SkillPayload
 import com.kh.occupying.Korail
@@ -25,10 +25,10 @@ open class BackgroundExecutor(
                 retryCount = 1800
         )
 
-        val loginPayload = it.action.params.mapTo<LoginParams>()
+        val reservationPayload = it.action.params.mapTo<ReservationParams>()
         val loginResult = korail.login(
-                id = loginPayload.id,
-                pw = loginPayload.pw
+                id = reservationPayload.id,
+                pw = reservationPayload.pw
         ).map { response ->
             (response as LoginResponse).toDomain()
         }
@@ -38,10 +38,10 @@ open class BackgroundExecutor(
                     korail.reserve(x.t2, x.t1)
                 }
                 .doOnSuccess {
-                    alarmSender.sendSuccessMessage("anytimedebug@gmail.com")
+                    alarmSender.sendSuccessMessage(reservationPayload.email)
                 }
                 .doOnError {
-                    alarmSender.sendFailMessage("anytimedebug@gmail.com")
+                    alarmSender.sendFailMessage(reservationPayload.email)
                 }
                 .block()
     }
