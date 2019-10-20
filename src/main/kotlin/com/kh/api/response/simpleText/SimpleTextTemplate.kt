@@ -1,20 +1,24 @@
 package com.kh.api.response.simpleText
 
-import com.kh.occupying.dto.response.CommonResponse
-import com.kh.occupying.dto.response.ReservationResponse
-
 data class SimpleTextTemplate(
         val simpleText: SimpleText
 ) {
     companion object {
-        fun fromResponse(response: CommonResponse): SimpleTextTemplate {
-            val text = if (response is ReservationResponse) {
-                "예약 성공하였습니다."
-            } else {
-                "예약 실패하였습니다."
-            }
-
+        fun of(text: String): SimpleTextTemplate {
             return SimpleTextTemplate(SimpleText(text))
+        }
+
+        fun fromThrowable(e: Throwable): SimpleTextTemplate {
+            val message = if (e.message != null)
+                e.message.orEmpty()
+            else
+                e.cause?.message.orEmpty()
+
+            val text = """
+                        $message
+                        열차 조회를 다시 해주시기 바랍니다.
+                    """.trimIndent()
+            return of(text)
         }
     }
 }

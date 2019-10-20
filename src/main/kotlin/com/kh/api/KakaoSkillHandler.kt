@@ -5,7 +5,6 @@ import com.kh.api.request.SkillPayload
 import com.kh.api.response.OutPuts
 import com.kh.api.response.SkillResponse
 import com.kh.api.response.carousel.CarouselTemplate
-import com.kh.api.response.simpleText.SimpleText
 import com.kh.api.response.simpleText.SimpleTextTemplate
 import com.kh.occupying.Korail
 import com.kh.occupying.dto.response.SearchResponse
@@ -36,42 +35,9 @@ class KakaoSkillHandler(
                     require(it is SearchResponse) {
                         it.responseMessage
                     }
-
-                    val outputs = OutPuts(
-                            outputs = listOf(
-                                    CarouselTemplate.fromResponse(it)
-                            )
-                    )
-                    val body = SkillResponse(
-                            version = "2.0",
-                            template = outputs
-                    )
-                    ServerResponse.ok()
-                            .contentType(MediaType.APPLICATION_JSON_UTF8)
-                            .syncBody(body)
+                    response(CarouselTemplate.fromResponse(it))
                 }.onErrorResume {
-                    val message = if(it.message != null)
-                        it.message.orEmpty()
-                    else
-                        it.cause?.message.orEmpty()
-
-                    val template = OutPuts(
-                            outputs = listOf(
-                                    SimpleTextTemplate(
-                                            SimpleText("""
-                                                $message
-                                                열차 조회를 다시 해주시기 바랍니다.
-                                            """.trimIndent())
-                                    )
-                            )
-                    )
-                    val body = SkillResponse(
-                            version = "2.0",
-                            template = template
-                    )
-                    ServerResponse.ok()
-                            .contentType(MediaType.APPLICATION_JSON_UTF8)
-                            .syncBody(body)
+                    response(SimpleTextTemplate.fromThrowable(it))
                 }
     }
 
@@ -81,24 +47,22 @@ class KakaoSkillHandler(
                     backgroundExecutor.reserveTrain(it)
                 }
                 .flatMap {
-                    val template = OutPuts(
-                            outputs = listOf(
-                                    SimpleTextTemplate(
-                                            SimpleText("""
-                                                예약 신청하였습니다.
-                                                예약 신청에 대한 결과는 입력하신 메일로 발송될 예정입니다.
-                                                매진 예약인 경우 최대 30분 동안 예약 시도하며 좌석 상황에 따라 예약이 성공하지 못할 수 있습니다.
-                                            """.trimIndent())
-                                    )
-                            )
-                    )
-                    val body = SkillResponse(
-                            version = "2.0",
-                            template = template
-                    )
-                    ServerResponse.ok()
-                            .contentType(MediaType.APPLICATION_JSON_UTF8)
-                            .syncBody(body)
+                    val template = SimpleTextTemplate.of("""
+                        예약 신청하였습니다.
+                        예약 신청에 대한 결과는 입력하신 메일로 발송될 예정입니다.
+                        매진 예약인 경우 최대 30분 동안 예약 시도하며 좌석 상황에 따라 예약이 성공하지 못할 수 있습니다.
+                    """.trimIndent())
+                    response(template)
                 }
+    }
+
+    private fun <T> response(template: T): Mono<ServerResponse> {
+        val body = SkillResponse(
+                version = "2.0",
+                template = OutPuts(listOf(template))
+        )
+        return ServerResponse.ok()
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .syncBody(body)
     }
 }
