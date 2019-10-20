@@ -8,7 +8,6 @@ import com.kh.occupying.Korail
 import com.kh.occupying.dto.response.SearchResponse
 import com.kh.util.SecretProperties
 import com.kh.util.mapTo
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Disabled
@@ -122,6 +121,29 @@ class KakaoSkillApiTest {
                 .jsonPath("$.template.outputs[0].simpleText.text").value<String> {
                     assertThat(it).contains(expected)
                 }
+    }
+
+    @Test
+    fun `test find trains response failed`() {
+        // Arrange
+        val body = findTrainBody(
+                departureDate = "20180101",
+                departureTime = "070000",
+                departureStation = "서울",
+                destinationStation = "부산"
+        )
+
+        // Act & Assert
+        webClient.post()
+                .uri("/api/kakao/find-trains")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .body(BodyInserters.fromObject(body))
+                .exchange()
+                .expectStatus().isOk
+                .expectBody()
+                .jsonPath("$.version").isEqualTo("2.0")
+                .jsonPath("$.template.outputs[0].simpleText.text").isNotEmpty
     }
 
     private fun findTrainBody(

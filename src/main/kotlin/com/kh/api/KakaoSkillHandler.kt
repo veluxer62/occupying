@@ -8,6 +8,7 @@ import com.kh.api.response.carousel.CarouselTemplate
 import com.kh.api.response.simpleText.SimpleText
 import com.kh.api.response.simpleText.SimpleTextTemplate
 import com.kh.occupying.Korail
+import com.kh.occupying.dto.response.SearchResponse
 import com.kh.service.AlarmSender
 import com.kh.service.BackgroundExecutor
 import com.kh.util.mapTo
@@ -33,24 +34,33 @@ class KakaoSkillHandler(
                             .getSearchParams()
                     korail.search(payload)
                 }.flatMap {
-                    val template = OutPuts(
+                    require(it is SearchResponse) {
+                        it.responseMessage
+                    }
+
+                    val outputs = OutPuts(
                             outputs = listOf(
                                     CarouselTemplate.fromResponse(it)
                             )
                     )
                     val body = SkillResponse(
                             version = "2.0",
-                            template = template
+                            template = outputs
                     )
                     ServerResponse.ok()
                             .contentType(MediaType.APPLICATION_JSON_UTF8)
                             .syncBody(body)
                 }.onErrorResume {
+                    val message = if(it.message != null)
+                        it.message.orEmpty()
+                    else
+                        it.cause?.message.orEmpty()
+
                     val template = OutPuts(
                             outputs = listOf(
                                     SimpleTextTemplate(
                                             SimpleText("""
-                                                ${it.cause?.message.orEmpty()}
+                                                $message
                                                 열차 조회를 다시 해주시기 바랍니다.
                                             """.trimIndent())
                                     )
