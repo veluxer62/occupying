@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
 import reactor.core.publisher.Mono
-import reactor.core.scheduler.Schedulers
 
 @Component
 class KakaoSkillHandler(
@@ -101,6 +100,5 @@ class KakaoSkillHandler(
                             .contentType(MediaType.APPLICATION_JSON_UTF8)
                             .syncBody(body)
                 }
-                .subscribeOn(Schedulers.elastic())
     }
 }
