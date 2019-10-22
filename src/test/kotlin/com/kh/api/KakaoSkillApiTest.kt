@@ -6,6 +6,7 @@ import com.kh.api.request.SearchTrainParams
 import com.kh.api.request.SkillPayload
 import com.kh.occupying.Korail
 import com.kh.occupying.dto.response.SearchResponse
+import com.kh.service.BackgroundExecutor
 import com.kh.util.SecretProperties
 import com.kh.util.mapTo
 import org.assertj.core.api.Assertions.assertThat
@@ -14,8 +15,10 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
+import org.mockito.BDDMockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
@@ -34,6 +37,9 @@ class KakaoSkillApiTest {
 
     @Autowired
     private lateinit var korail: Korail
+
+    @MockBean
+    private lateinit var backgroundExecutor: BackgroundExecutor
 
     private lateinit var id: String
     private lateinit var pw: String
@@ -160,6 +166,9 @@ class KakaoSkillApiTest {
                 .expectBody()
                 .jsonPath("$.version").isEqualTo("2.0")
                 .jsonPath("$.template.outputs[0].simpleText.text").isNotEmpty
+
+        val payload = jacksonObjectMapper().readValue(body, SkillPayload::class.java)
+        BDDMockito.verify(backgroundExecutor).reserveTrain(payload)
     }
 
     private fun findTrainRequest(
