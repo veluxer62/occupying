@@ -29,6 +29,7 @@ dependencies {
 	testImplementation("org.junit.jupiter:junit-jupiter-api")
 	testImplementation("org.junit.jupiter:junit-jupiter-params")
 	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+	testRuntimeOnly("org.mockito:mockito-inline:3.1.0")
 }
 
 tasks.withType<KotlinCompile> {

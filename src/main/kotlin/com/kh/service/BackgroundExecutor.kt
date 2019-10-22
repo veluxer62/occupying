@@ -8,6 +8,8 @@ import com.kh.occupying.dto.response.LoginResponse
 import com.kh.util.mapTo
 import org.springframework.scheduling.annotation.Async
 import reactor.core.publisher.Mono
+import reactor.core.publisher.onErrorReturn
+import java.lang.IllegalArgumentException
 
 open class BackgroundExecutor(
         private val korail: Korail,
@@ -29,20 +31,23 @@ open class BackgroundExecutor(
         val loginResult = korail.login(
                 id = reservationPayload.id,
                 pw = reservationPayload.pw
-        ).map { response ->
-            (response as LoginResponse).toDomain()
-        }
+        )
 
-        Mono.zip(findTrains, loginResult)
-                .flatMap { x ->
-                    korail.reserve(x.t2, x.t1)
-                }
-                .doOnSuccess {
-                    alarmSender.sendSuccessMessage(reservationPayload.email)
-                }
-                .doOnError {
-                    alarmSender.sendFailMessage(reservationPayload.email)
-                }
-                .block()
+        try {
+            Mono.zip(findTrains, loginResult)
+                    .flatMap { x ->
+                        require(x.t2 is LoginResponse) {
+                            x.t2.responseMessage
+                        }
+
+                        val login = (x.t2 as LoginResponse).toDomain()
+                        val train = x.t1
+                        korail.reserve(login, train)
+                    }
+                    .block()
+            alarmSender.sendSuccessMessage(reservationPayload.email)
+        } catch (e: Exception) {
+            alarmSender.sendFailMessage(reservationPayload.email)
+        }
     }
 }
