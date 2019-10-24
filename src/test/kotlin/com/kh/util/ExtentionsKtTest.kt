@@ -2,6 +2,7 @@ package com.kh.util
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
@@ -113,6 +114,20 @@ class ExtentionsTest {
                     Arguments.of(map, sample)
             )
         }
+
+        @JvmStatic
+        fun initEmail(): Stream<Arguments> {
+            return Stream.of(
+                    Arguments.of("test", false),
+                    Arguments.of("john.doe@mail.com", true),
+                    Arguments.of("test@gmail.com", true),
+                    Arguments.of("xxxx@yyyy.zzz", false),
+                    Arguments.of("asdf@asdf.asdf", false),
+                    Arguments.of("john.doe@somewhere.com", true),
+                    Arguments.of("joe@server.com", true),
+                    Arguments.of("n@naver.com", true)
+            )
+        }
     }
 
     @ParameterizedTest
@@ -136,6 +151,16 @@ class ExtentionsTest {
     ) {
         // Arrange & Act
         val actual = sut.mapTo<SampleWithJsonPropertyClass>()
+
+        // Assert
+        assertThat(actual).isEqualTo(expected)
+    }
+
+    @ParameterizedTest
+    @MethodSource("initEmail")
+    fun `test isEmail method`(email: String, expected: Boolean) {
+        // Arrange & Act
+        val actual = email.isEmail()
 
         // Assert
         assertThat(actual).isEqualTo(expected)
