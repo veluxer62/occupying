@@ -14,10 +14,10 @@ import java.util.*
 
 class KorailTest {
 
-    lateinit var id: String
-    lateinit var pw: String
-    lateinit var client: WebClientWrapper
-    lateinit var sut: Korail
+    private lateinit var id: String
+    private lateinit var pw: String
+    private lateinit var client: WebClientWrapper
+    private lateinit var sut: Korail
 
     @BeforeEach
     fun setUp() {

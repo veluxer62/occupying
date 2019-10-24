@@ -2,7 +2,6 @@ package com.kh.occupying
 
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.JsonMappingException
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.kh.occupying.dto.response.CommonResponse
 import com.kh.occupying.dto.response.FailResponse

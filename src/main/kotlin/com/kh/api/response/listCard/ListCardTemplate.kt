@@ -1,7 +1,6 @@
 package com.kh.api.response.listCard
 
 import com.kh.api.response.Buttons
-import com.kh.occupying.domain.Train
 import com.kh.occupying.dto.response.CommonResponse
 import com.kh.occupying.dto.response.SearchResponse
 

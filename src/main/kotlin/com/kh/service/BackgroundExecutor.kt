@@ -8,8 +8,6 @@ import com.kh.occupying.dto.response.LoginResponse
 import com.kh.util.mapTo
 import org.springframework.scheduling.annotation.Async
 import reactor.core.publisher.Mono
-import reactor.core.publisher.onErrorReturn
-import java.lang.IllegalArgumentException
 
 open class BackgroundExecutor(
         private val korail: Korail,

@@ -1,5 +1,6 @@
 package com.kh.api.response.listCard
 
+@Suppress("EnumEntryName")
 enum class ActionType {
     webLink,
     osLink,

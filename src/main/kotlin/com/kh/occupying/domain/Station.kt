@@ -1,5 +1,6 @@
 package com.kh.occupying.domain
 
+@Suppress("EnumEntryName", "NonAsciiCharacters")
 enum class Station(val code: String) {
     서울("0001"),
     용산("0104"),
