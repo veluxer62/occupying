@@ -1,5 +1,6 @@
 package com.kh.api
 
+import com.kh.api.request.ReservationParams
 import com.kh.api.request.SearchTrainParams
 import com.kh.api.request.SkillPayload
 import com.kh.api.response.OutPuts
@@ -37,12 +38,20 @@ class KakaoSkillHandler(
                     }
                     response(CarouselTemplate.fromResponse(it))
                 }.onErrorResume {
-                    response(SimpleTextTemplate.fromThrowable(it))
+                    response(SimpleTextTemplate.fromThrowable(it) { message ->
+                        """
+                            $message
+                            열차 조회를 다시 해주시기 바랍니다.
+                        """.trimIndent()
+                    })
                 }
     }
 
     fun reserveTrain(req: ServerRequest): Mono<ServerResponse> {
         return req.bodyToMono(SkillPayload::class.java)
+                .doOnNext {
+                    it.action.params.mapTo<ReservationParams>()
+                }
                 .doOnNext {
                     backgroundExecutor.reserveTrain(it)
                 }
@@ -53,6 +62,13 @@ class KakaoSkillHandler(
                         매진 예약인 경우 최대 30분 동안 예약 시도하며 좌석 상황에 따라 예약이 성공하지 못할 수 있습니다.
                     """.trimIndent())
                     response(template)
+                }.onErrorResume {
+                    response(SimpleTextTemplate.fromThrowable(it) { message ->
+                        """
+                            $message
+                            예약 신청을 다시 해주시기 바랍니다.
+                        """.trimIndent()
+                    })
                 }
     }
 

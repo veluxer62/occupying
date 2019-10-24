@@ -8,17 +8,16 @@ data class SimpleTextTemplate(
             return SimpleTextTemplate(SimpleText(text))
         }
 
-        fun fromThrowable(e: Throwable): SimpleTextTemplate {
+        fun fromThrowable(
+                e: Throwable,
+                messageWrapper: (message: String) -> String
+        ): SimpleTextTemplate {
             val message = if (e.message != null)
                 e.message.orEmpty()
             else
                 e.cause?.message.orEmpty()
 
-            val text = """
-                        $message
-                        열차 조회를 다시 해주시기 바랍니다.
-                    """.trimIndent()
-            return of(text)
+            return of(messageWrapper(message))
         }
     }
 }

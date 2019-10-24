@@ -184,4 +184,33 @@ class KakaoSkillApiTest {
         BDDMockito.verify(backgroundExecutor).reserveTrain(payload)
     }
 
+    @Test
+    fun `given wrong email reserve train will return response correctly`() {
+        // Arrange
+        val body = requestBodyCreator.reservationRequest(
+                departureDate = departureDate,
+                departureTime = "070000",
+                departureStation = "서울",
+                destinationStation = "부산",
+                id = id,
+                pw = pw,
+                email = "test"
+        )
+
+        // Act & Assert
+        webClient.post()
+                .uri("/api/kakao/reserve-train")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .body(BodyInserters.fromObject(body))
+                .exchange()
+                .expectStatus().isOk
+                .expectBody()
+                .jsonPath("$.version").isEqualTo("2.0")
+                .jsonPath("$.template.outputs[0].simpleText.text").isNotEmpty
+                .jsonPath("$.template.outputs[0].simpleText.text").value<String> {
+                    assertThat(it).contains("예약 신청을 다시 해주시기 바랍니다.")
+                }
+    }
+
 }
