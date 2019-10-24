@@ -150,6 +150,9 @@ class KakaoSkillApiTest {
                 .expectBody()
                 .jsonPath("$.version").isEqualTo("2.0")
                 .jsonPath("$.template.outputs[0].simpleText.text").isNotEmpty
+                .jsonPath("$.template.outputs[0].simpleText.text").value<String> {
+                    assertThat(it).contains("열차 조회를 다시 해주시기 바랍니다.")
+                }
     }
 
     @Test
