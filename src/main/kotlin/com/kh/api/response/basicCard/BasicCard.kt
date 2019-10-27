@@ -1,17 +1,25 @@
-package com.kh.api.response.carousel
+package com.kh.api.response.basicCard
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.kh.api.response.Buttons
+import com.kh.api.response.Thumbnail
 import com.kh.api.response.buttonsExtra.ReserveExtra
 import com.kh.api.response.listCard.ActionType
 import com.kh.occupying.domain.Train
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 data class BasicCard(
+        @JsonInclude(JsonInclude.Include.NON_NULL)
         val title: String,
-        val description: String,
-        val thumbnail: Thumbnail,
-        val buttons: List<Buttons<ReserveExtra>>
+
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        val description: String?,
+
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        val thumbnail: Thumbnail?,
+
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        val buttons: List<Buttons<ReserveExtra>>?
 ) {
     companion object {
         fun fromTrain(train: Train): BasicCard {
@@ -19,7 +27,11 @@ data class BasicCard(
                     title = makeTitle(train),
                     description = makeDescription(train),
                     thumbnail = Thumbnail(
-                            imageUrl = "https://t1.daumcdn.net/cfile/tistory/026E244F51CB94FA0C"
+                            imageUrl = "https://t1.daumcdn.net/cfile/tistory/026E244F51CB94FA0C",
+                            link = null,
+                            fixedRatio = null,
+                            width = null,
+                            height = null
                     ),
                     buttons = makeButton(train)
             )

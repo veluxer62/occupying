@@ -1,6 +1,8 @@
 package com.kh.api.response.carousel
 
 import com.kh.api.response.Buttons
+import com.kh.api.response.Thumbnail
+import com.kh.api.response.basicCard.BasicCard
 import com.kh.api.response.buttonsExtra.ReserveExtra
 import com.kh.api.response.listCard.ActionType
 import com.kh.occupying.domain.Station
@@ -47,7 +49,11 @@ class CarouselTemplateTest {
                 title = "[KTX]10월10일 [서울]07:00~[부산]09:30",
                 description = "열차[233] 48800원 [예약 가능]",
                 thumbnail = Thumbnail(
-                        imageUrl = "https://t1.daumcdn.net/cfile/tistory/026E244F51CB94FA0C"
+                        imageUrl = "https://t1.daumcdn.net/cfile/tistory/026E244F51CB94FA0C",
+                        link = null,
+                        fixedRatio = null,
+                        width = null,
+                        height = null
                 ),
                 buttons = listOf(
                         button

@@ -1,5 +1,6 @@
 package com.kh.api.response.carousel
 
+import com.kh.api.response.basicCard.BasicCard
 import com.kh.occupying.dto.response.CommonResponse
 import com.kh.occupying.dto.response.SearchResponse
 
