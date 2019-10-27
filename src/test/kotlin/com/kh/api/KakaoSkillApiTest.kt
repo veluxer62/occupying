@@ -96,6 +96,18 @@ class KakaoSkillApiTest {
                 .jsonPath("$.version").isEqualTo("2.0")
                 .jsonPath("$listCardPath.type").isEqualTo("basicCard")
                 .jsonPath("$listCardPath.items").isArray
+                .jsonPath("$listCardPath.items[?(@.title != '')]").isNotEmpty
+                .jsonPath("$listCardPath.items[?(@.description != '')]").isNotEmpty
+                .jsonPath("$listCardPath.items[?(@.thumbnail.imageUrl != '')]").isNotEmpty
+                .jsonPath("$listCardPath.items[?(@.buttons[0].label == '예약하기')]").isNotEmpty
+                .jsonPath("$listCardPath.items[?(@.buttons[0].action == 'block')]").isNotEmpty
+                .jsonPath("$listCardPath.items[?(@.buttons[0].blockId != '')]").isNotEmpty
+                .jsonPath("$listCardPath.items[?(@.buttons[0].extra != null)]").isNotEmpty
+                .jsonPath("$listCardPath.items[?(@.buttons[0].extra.departure-date != '')]").isNotEmpty
+                .jsonPath("$listCardPath.items[?(@.buttons[0].extra.departure-time != '')]").isNotEmpty
+                .jsonPath("$listCardPath.items[?(@.buttons[0].extra.train-no != '')]").isNotEmpty
+                .jsonPath("$listCardPath.items[?(@.buttons[0].extra.departure-station != '')]").isNotEmpty
+                .jsonPath("$listCardPath.items[?(@.buttons[0].extra.destination-station != '')]").isNotEmpty
     }
 
     @ParameterizedTest
