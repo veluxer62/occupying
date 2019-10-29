@@ -126,6 +126,7 @@ class KakaoSkillApiTest {
         )
 
         // Act & Assert
+        val basicCardPath = "$.template.outputs[0].basicCard"
         webClient.post()
                 .uri("/api/kakao/find-trains")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -135,9 +136,20 @@ class KakaoSkillApiTest {
                 .expectStatus().isOk
                 .expectBody()
                 .jsonPath("$.version").isEqualTo("2.0")
-                .jsonPath("$.template.outputs[0].simpleText.text").isNotEmpty
-                .jsonPath("$.template.outputs[0].simpleText.text").value<String> {
+                .jsonPath("$basicCardPath.title").value<String> {
+                    assertThat(it).isEqualTo("열차 조회를 실패")
+                }
+                .jsonPath("$basicCardPath.description").value<String> {
                     assertThat(it).contains(expected)
+                }
+                .jsonPath("$basicCardPath.buttons[0].label").value<String> {
+                    assertThat(it).isEqualTo("다시 조회")
+                }
+                .jsonPath("$basicCardPath.buttons[0].action").value<String> {
+                    assertThat(it).isEqualTo("block")
+                }
+                .jsonPath("$basicCardPath.buttons[0].messageText").value<String> {
+                    assertThat(it).isEqualTo("열차조회")
                 }
     }
 
@@ -152,6 +164,7 @@ class KakaoSkillApiTest {
         )
 
         // Act & Assert
+        val basicCardPath = "$.template.outputs[0].basicCard"
         webClient.post()
                 .uri("/api/kakao/find-trains")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -161,9 +174,20 @@ class KakaoSkillApiTest {
                 .expectStatus().isOk
                 .expectBody()
                 .jsonPath("$.version").isEqualTo("2.0")
-                .jsonPath("$.template.outputs[0].simpleText.text").isNotEmpty
-                .jsonPath("$.template.outputs[0].simpleText.text").value<String> {
+                .jsonPath("$basicCardPath.title").value<String> {
+                    assertThat(it).isEqualTo("열차 조회를 실패")
+                }
+                .jsonPath("$basicCardPath.description").value<String> {
                     assertThat(it).contains("열차 조회를 다시 해주시기 바랍니다.")
+                }
+                .jsonPath("$basicCardPath.buttons[0].label").value<String> {
+                    assertThat(it).isEqualTo("다시 조회")
+                }
+                .jsonPath("$basicCardPath.buttons[0].action").value<String> {
+                    assertThat(it).isEqualTo("block")
+                }
+                .jsonPath("$basicCardPath.buttons[0].messageText").value<String> {
+                    assertThat(it).isEqualTo("열차조회")
                 }
     }
 

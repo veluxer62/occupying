@@ -3,9 +3,13 @@ package com.kh.api
 import com.kh.api.request.ReservationParams
 import com.kh.api.request.SearchTrainParams
 import com.kh.api.request.SkillPayload
+import com.kh.api.response.Buttons
 import com.kh.api.response.OutPuts
 import com.kh.api.response.SkillResponse
+import com.kh.api.response.basicCard.BasicCard
+import com.kh.api.response.basicCard.BasicCardTemplate
 import com.kh.api.response.carousel.CarouselTemplate
+import com.kh.api.response.listCard.ActionType
 import com.kh.api.response.simpleText.SimpleTextTemplate
 import com.kh.occupying.Korail
 import com.kh.occupying.dto.response.SearchResponse
@@ -38,12 +42,7 @@ class KakaoSkillHandler(
                     }
                     response(CarouselTemplate.fromResponse(it))
                 }.onErrorResume {
-                    response(SimpleTextTemplate.fromThrowable(it) { message ->
-                        """
-                            $message
-                            열차 조회를 다시 해주시기 바랍니다.
-                        """.trimIndent()
-                    })
+                    response(BasicCardTemplate.fromThrowable(it))
                 }
     }
 
