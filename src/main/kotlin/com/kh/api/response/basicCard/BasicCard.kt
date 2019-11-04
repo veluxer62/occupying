@@ -8,7 +8,7 @@ import com.kh.api.response.listCard.ActionType
 import com.kh.occupying.domain.Train
 import java.time.format.DateTimeFormatter
 
-data class BasicCard(
+data class BasicCard<T>(
         @JsonInclude(JsonInclude.Include.NON_NULL)
         val title: String,
 
@@ -19,10 +19,10 @@ data class BasicCard(
         val thumbnail: Thumbnail?,
 
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        val buttons: List<Buttons<ReserveExtra>>?
+        val buttons: List<Buttons<T>>?
 ) {
     companion object {
-        fun fromTrain(train: Train): BasicCard {
+        fun fromTrain(train: Train): BasicCard<ReserveExtra> {
             return BasicCard(
                     title = makeTitle(train),
                     description = makeDescription(train),

@@ -194,17 +194,21 @@ class KakaoSkillApiTest {
     @Test
     fun `test reserve train`() {
         // Arrange
+        val departureTime = "070000"
+        val departureStation = "서울"
+        val destinationStation = "부산"
         val body = requestBodyCreator.reservationRequest(
                 departureDate = departureDate,
-                departureTime = "070000",
-                departureStation = "서울",
-                destinationStation = "부산",
+                departureTime = departureTime,
+                departureStation = departureStation,
+                destinationStation = destinationStation,
                 id = id,
                 pw = pw,
                 email = email
         )
 
         // Act & Assert
+        val basicCardPath = "$.template.outputs[0].basicCard"
         webClient.post()
                 .uri("/api/kakao/reserve-train")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -214,7 +218,41 @@ class KakaoSkillApiTest {
                 .expectStatus().isOk
                 .expectBody()
                 .jsonPath("$.version").isEqualTo("2.0")
-                .jsonPath("$.template.outputs[0].simpleText.text").isNotEmpty
+                .jsonPath("$basicCardPath.title").value<String> {
+                    assertThat(it).isEqualTo("예약 신청 완료")
+                }
+                .jsonPath("$basicCardPath.description").isNotEmpty
+                .jsonPath("$basicCardPath.buttons[0].label").value<String> {
+                    assertThat(it).isEqualTo("다시 예약신청")
+                }
+                .jsonPath("$basicCardPath.buttons[0].action").value<String> {
+                    assertThat(it).isEqualTo("block")
+                }
+                .jsonPath("$basicCardPath.buttons[0].messageText").value<String> {
+                    assertThat(it).isEqualTo("다시예약신청")
+                }
+                .jsonPath("$basicCardPath.buttons[0].extra.departure-date").value<String> {
+                    assertThat(it).isEqualTo(departureDate)
+                }
+                .jsonPath("$basicCardPath.buttons[0].extra.departure-time").value<String> {
+                    assertThat(it).isEqualTo(departureTime)
+                }
+                .jsonPath("$basicCardPath.buttons[0].extra.train-no").isNotEmpty
+                .jsonPath("$basicCardPath.buttons[0].extra.departure-station").value<String> {
+                    assertThat(it).isEqualTo(departureStation)
+                }
+                .jsonPath("$basicCardPath.buttons[0].extra.destination-station").value<String> {
+                    assertThat(it).isEqualTo(destinationStation)
+                }
+                .jsonPath("$basicCardPath.buttons[0].extra.id").value<String> {
+                    assertThat(it).isEqualTo(id)
+                }
+                .jsonPath("$basicCardPath.buttons[0].extra.pw").value<String> {
+                    assertThat(it).isEqualTo(pw)
+                }
+                .jsonPath("$basicCardPath.buttons[0].extra.email").value<String> {
+                    assertThat(it).isEqualTo(email)
+                }
 
         val payload = jacksonObjectMapper().readValue(body, SkillPayload::class.java)
         BDDMockito.verify(backgroundExecutor).reserveTrain(payload)

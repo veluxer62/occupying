@@ -3,13 +3,10 @@ package com.kh.api
 import com.kh.api.request.ReservationParams
 import com.kh.api.request.SearchTrainParams
 import com.kh.api.request.SkillPayload
-import com.kh.api.response.Buttons
 import com.kh.api.response.OutPuts
 import com.kh.api.response.SkillResponse
-import com.kh.api.response.basicCard.BasicCard
 import com.kh.api.response.basicCard.BasicCardTemplate
 import com.kh.api.response.carousel.CarouselTemplate
-import com.kh.api.response.listCard.ActionType
 import com.kh.api.response.simpleText.SimpleTextTemplate
 import com.kh.occupying.Korail
 import com.kh.occupying.dto.response.SearchResponse
@@ -55,12 +52,7 @@ class KakaoSkillHandler(
                     backgroundExecutor.reserveTrain(it)
                 }
                 .flatMap {
-                    val template = SimpleTextTemplate.of("""
-                        예약 신청하였습니다.
-                        예약 신청에 대한 결과는 입력하신 메일로 발송될 예정입니다.
-                        매진 예약인 경우 최대 30분 동안 예약 시도하며 좌석 상황에 따라 예약이 성공하지 못할 수 있습니다.
-                    """.trimIndent())
-                    response(template)
+                    response(BasicCardTemplate.fromReserveSkillPayload(it))
                 }.onErrorResume {
                     response(SimpleTextTemplate.fromThrowable(it) { message ->
                         """

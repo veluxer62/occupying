@@ -30,7 +30,7 @@ class CarouselTemplateTest {
         assertThat(actual.carousel.items[0]).isEqualTo(baseCard)
     }
 
-    private fun getBasicCard(): BasicCard {
+    private fun getBasicCard(): BasicCard<ReserveExtra> {
         val reserveExtra = ReserveExtra(
                 departureDate = LocalDate.of(2019, 10, 10),
                 departureTime = LocalTime.of(7, 0, 0),
