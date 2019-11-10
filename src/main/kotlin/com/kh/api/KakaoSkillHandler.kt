@@ -49,10 +49,24 @@ class KakaoSkillHandler(
                     it.action.params.mapTo<ReservationParams>()
                 }
                 .doOnNext {
-                    backgroundExecutor.reserveTrain(it)
+                    val (
+                            searchPayload,
+                            trainNo,
+                            reservationPayload
+                    ) = getReservationPayloads(it)
+
+                    backgroundExecutor.reserveTrain(
+                            searchPayload.getSearchParams(), trainNo, reservationPayload)
                 }
                 .flatMap {
-                    response(BasicCardTemplate.fromReserveSkillPayload(it))
+                    val (
+                            searchPayload,
+                            trainNo,
+                            reservationPayload
+                    ) = getReservationPayloads(it)
+
+                    response(BasicCardTemplate.fromReserveSkillPayload(
+                            searchPayload, trainNo, reservationPayload))
                 }.onErrorResume {
                     response(SimpleTextTemplate.fromThrowable(it) { message ->
                         """
@@ -61,6 +75,60 @@ class KakaoSkillHandler(
                         """.trimIndent()
                     })
                 }
+    }
+
+    private fun getReservationPayloads(it: SkillPayload):
+            Triple<SearchTrainParams, String, ReservationParams> {
+        val clientExtra = it.action.clientExtra.orEmpty()
+        val searchPayload = clientExtra
+                .mapTo<SearchTrainParams>()
+        val trainNo = clientExtra["train-no"].toString()
+        val reservationPayload = it.action.params
+                .mapTo<ReservationParams>()
+
+        return Triple(searchPayload, trainNo, reservationPayload)
+    }
+
+    fun retryTrainReservation(req: ServerRequest): Mono<ServerResponse> {
+        return req.bodyToMono(SkillPayload::class.java)
+                .doOnNext {
+                    val (
+                            searchPayload,
+                            trainNo,
+                            reservationPayload
+                    ) = retryReservationPayloads(it)
+
+                    backgroundExecutor.reserveTrain(
+                            searchPayload.getSearchParams(), trainNo, reservationPayload)
+                }
+                .flatMap {
+                    val (
+                            searchPayload,
+                            trainNo,
+                            reservationPayload
+                    ) = retryReservationPayloads(it)
+
+                    response(BasicCardTemplate.fromReserveSkillPayload(
+                            searchPayload, trainNo, reservationPayload))
+                }.onErrorResume {
+                    response(SimpleTextTemplate.fromThrowable(it) { message ->
+                        """
+                            $message
+                            예약 신청을 다시 해주시기 바랍니다.
+                        """.trimIndent()
+                    })
+                }
+    }
+
+    private fun retryReservationPayloads(it: SkillPayload):
+            Triple<SearchTrainParams, String, ReservationParams> {
+        val clientExtra = it.action.clientExtra.orEmpty()
+        val searchPayload = clientExtra
+                .mapTo<SearchTrainParams>()
+        val trainNo = clientExtra["train-no"].toString()
+        val reservationPayload = clientExtra.mapTo<ReservationParams>()
+
+        return Triple(searchPayload, trainNo, reservationPayload)
     }
 
     private fun <T> response(template: T): Mono<ServerResponse> {

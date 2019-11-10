@@ -1,6 +1,7 @@
 package com.kh.api.response.basicCard
 
-import com.kh.api.request.SkillPayload
+import com.kh.api.request.ReservationParams
+import com.kh.api.request.SearchTrainParams
 import com.kh.api.response.Buttons
 import com.kh.api.response.buttonsExtra.ReserveRetryExtra
 import com.kh.api.response.listCard.ActionType
@@ -34,7 +35,9 @@ data class BasicCardTemplate<T>(
             )
         }
 
-        fun fromReserveSkillPayload(payload: SkillPayload):
+        fun fromReserveSkillPayload(searchParams: SearchTrainParams,
+                                    trainNo: String,
+                                    reserveParams: ReservationParams):
                 BasicCardTemplate<ReserveRetryExtra> {
             return BasicCardTemplate(
                     BasicCard(
@@ -51,7 +54,8 @@ data class BasicCardTemplate<T>(
                                             label = "다시 예약신청",
                                             action = ActionType.block,
                                             messageText = "다시예약신청",
-                                            extra = ReserveRetryExtra.fromSkillPayload(payload)
+                                            extra = ReserveRetryExtra.fromSkillPayload(
+                                                    searchParams, trainNo, reserveParams)
                                     )
                             )
                     )

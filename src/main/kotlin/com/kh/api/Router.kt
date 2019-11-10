@@ -10,16 +10,14 @@ import org.springframework.web.reactive.function.server.router
 @Configuration
 @EnableWebFlux
 class Router : WebFluxConfigurer {
-
     @Bean
     fun kakaoSkillRoutes(handler: KakaoSkillHandler) = router {
         "/api/kakao".nest {
             accept(MediaType.APPLICATION_JSON_UTF8).nest {
                 POST("/find-trains", handler::findTrains)
                 POST("/reserve-train", handler::reserveTrain)
+                POST("/retry-train-reservation", handler::retryTrainReservation)
             }
         }
-
     }
-
 }

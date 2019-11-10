@@ -2,10 +2,13 @@ package com.kh.service
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.kh.api.config.AppConfig
+import com.kh.api.request.ReservationParams
+import com.kh.api.request.SearchTrainParams
 import com.kh.api.request.SkillPayload
 import com.kh.occupying.Korail
 import com.kh.util.RequestBodyCreator
 import com.kh.util.SecretProperties
+import com.kh.util.mapTo
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito
@@ -52,9 +55,16 @@ internal class BackgroundExecutorTest {
 
         val skillPayload = jacksonObjectMapper()
                 .readValue(body, SkillPayload::class.java)
+        val clientExtra = skillPayload.action.clientExtra.orEmpty()
+        val searchPayload = clientExtra
+                .mapTo<SearchTrainParams>()
+                .getSearchParams()
+        val trainNo = clientExtra["train-no"].toString()
+        val reservationPayload = skillPayload.action.params
+                .mapTo<ReservationParams>()
 
         // Act
-        backgroundExecutor.reserveTrain(skillPayload)
+        backgroundExecutor.reserveTrain(searchPayload, trainNo, reservationPayload)
 
         // Assert
         BDDMockito.verify(alarmSender).sendSuccessMessage(secretProperties.email.id)
@@ -76,9 +86,16 @@ internal class BackgroundExecutorTest {
 
         val skillPayload = jacksonObjectMapper()
                 .readValue(body, SkillPayload::class.java)
+        val clientExtra = skillPayload.action.clientExtra.orEmpty()
+        val searchPayload = clientExtra
+                .mapTo<SearchTrainParams>()
+                .getSearchParams()
+        val trainNo = clientExtra["train-no"].toString()
+        val reservationPayload = skillPayload.action.params
+                .mapTo<ReservationParams>()
 
         // Act
-        backgroundExecutor.reserveTrain(skillPayload)
+        backgroundExecutor.reserveTrain(searchPayload, trainNo, reservationPayload)
 
         // Assert
         BDDMockito.verify(alarmSender).sendFailMessage(secretProperties.email.id)

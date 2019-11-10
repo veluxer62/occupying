@@ -142,4 +142,65 @@ class RequestBodyCreator(private val korail: Korail) {
             """.trimIndent()
     }
 
+    fun retryReservationRequest(
+            departureDate: String,
+            departureTime: String,
+            departureStation: String,
+            destinationStation: String,
+            id: String,
+            pw: String,
+            email: String
+    ): String {
+        val trainNo = getTrainNo(
+                departureDate = departureDate,
+                departureTime = departureTime,
+                departureStation = departureStation,
+                destinationStation = destinationStation
+        )
+        return """
+                {
+                    "intent": {
+                    "id": "d7coyklcoly0q5lhjh6zdjzd",
+                    "name": "블록 이름"
+                  },
+                  "userRequest": {
+                    "timezone": "Asia/Seoul",
+                    "params": {
+                      "ignoreMe": "true"
+                    },
+                    "block": {
+                      "id": "d7coyklcoly0q5lhjh6zdjzd",
+                      "name": "블록 이름"
+                    },
+                    "utterance": "발화 내용",
+                    "lang": null,
+                    "user": {
+                      "id": "515520",
+                      "type": "accountId",
+                      "properties": {}
+                    }
+                  },
+                  "bot": {
+                    "id": "5d97076fb617ea00012af4e0",
+                    "name": "봇 이름"
+                  },
+                    "action": {
+                        "name": "예약 API",
+                        "clientExtra": {
+                            "departure-time": "$departureTime",
+                            "departure-date": "$departureDate",
+                            "train-no": "$trainNo",
+                            "destination-station": "$destinationStation",
+                            "departure-station": "$departureStation",
+                            "id": "$id",
+                            "pw": "$pw",
+                            "email": "$email"
+                        },
+                        "params": {},
+                        "id": "krcu052b90c6angense4fxgy"
+                    }
+                }
+            """.trimIndent()
+    }
+
 }
