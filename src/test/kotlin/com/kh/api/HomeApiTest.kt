@@ -5,6 +5,7 @@ import org.springframework.test.web.reactive.server.WebTestClient
 
 internal class HomeApiTest {
 
+    
     private val route = Router().homeRoute()
     private val client = WebTestClient.bindToRouterFunction(route).build()
 
