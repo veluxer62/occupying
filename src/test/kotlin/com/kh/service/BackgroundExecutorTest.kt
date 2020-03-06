@@ -5,7 +5,7 @@ import com.kh.api.config.AppConfig
 import com.kh.api.request.ReservationParams
 import com.kh.api.request.SearchTrainParams
 import com.kh.api.request.SkillPayload
-import com.kh.occupying.Korail
+import com.kh.deprecatedOccupying.Korail
 import com.kh.util.RequestBodyCreator
 import com.kh.util.SecretProperties
 import com.kh.util.mapTo

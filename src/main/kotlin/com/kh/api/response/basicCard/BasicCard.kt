@@ -5,7 +5,7 @@ import com.kh.api.response.Buttons
 import com.kh.api.response.Thumbnail
 import com.kh.api.response.buttonsExtra.ReserveExtra
 import com.kh.api.response.listCard.ActionType
-import com.kh.occupying.domain.Train
+import com.kh.deprecatedOccupying.domain.Train
 import java.time.format.DateTimeFormatter
 
 data class BasicCard<T>(

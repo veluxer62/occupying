@@ -2,8 +2,8 @@ package com.kh.api.request
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.kh.api.exception.IllegalParameterException
-import com.kh.occupying.domain.Station
-import com.kh.occupying.dto.param.SearchParams
+import com.kh.deprecatedOccupying.domain.Station
+import com.kh.deprecatedOccupying.dto.param.SearchParams
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime

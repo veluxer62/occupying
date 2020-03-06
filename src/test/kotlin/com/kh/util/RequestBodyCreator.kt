@@ -3,8 +3,8 @@ package com.kh.util
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.kh.api.request.SearchTrainParams
 import com.kh.api.request.SkillPayload
-import com.kh.occupying.Korail
-import com.kh.occupying.dto.response.SearchResponse
+import com.kh.deprecatedOccupying.Korail
+import com.kh.deprecatedOccupying.dto.response.SearchResponse
 
 class RequestBodyCreator(private val korail: Korail) {
 

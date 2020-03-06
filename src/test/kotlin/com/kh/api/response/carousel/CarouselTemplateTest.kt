@@ -5,8 +5,8 @@ import com.kh.api.response.Thumbnail
 import com.kh.api.response.basicCard.BasicCard
 import com.kh.api.response.buttonsExtra.ReserveExtra
 import com.kh.api.response.listCard.ActionType
-import com.kh.occupying.domain.Station
-import com.kh.occupying.dto.response.*
+import com.kh.deprecatedOccupying.domain.Station
+import com.kh.deprecatedOccupying.dto.response.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDate

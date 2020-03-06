@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.kh.api.request.ReservationParams
 import com.kh.api.request.SearchTrainParams
-import com.kh.occupying.domain.Station
+import com.kh.deprecatedOccupying.domain.Station
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
