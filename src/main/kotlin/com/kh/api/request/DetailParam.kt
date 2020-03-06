@@ -2,6 +2,5 @@ package com.kh.api.request
 
 data class DetailParam(
         val origin: String,
-        val value: String,
-        val groupName: String
+        val value: String
 )

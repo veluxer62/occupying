@@ -129,14 +129,32 @@ class RequestBodyCreator(private val korail: Korail) {
                   },
                   "action": {
                     "name": "g0xxzoae15",
-                    "clientExtra": null,
                     "params": {
                       "departure-date": "$departureDate",
                       "departure-time": "$departureTime",
                       "departure-station": "$departureStation",
                       "destination-station": "$destinationStation"
                     },
-                    "id": "krcu052b90c6angense4fxgy"
+                    "id": "krcu052b90c6angense4fxgy",
+                    "detailParams": {
+                      "departure-date": {
+                        "origin": "20200302",
+                        "value": "20200302"
+                      },
+                      "departure-time": {
+                        "origin": "070000",
+                        "value": "070000"
+                      },
+                      "departure-station": {
+                        "origin": "서울",
+                        "value": "서울"
+                      },
+                      "destination-station": {
+                        "origin": "부산",
+                        "value": "부산"
+                      }
+                    },
+                    "clientExtra": {}
                   }
                 }
             """.trimIndent()
