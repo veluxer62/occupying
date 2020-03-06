@@ -1,9 +1,9 @@
 package com.kh.service
 
 import com.kh.api.request.ReservationParams
-import com.kh.occupying.Korail
-import com.kh.occupying.dto.param.SearchParams
-import com.kh.occupying.dto.response.LoginResponse
+import com.kh.deprecatedOccupying.Korail
+import com.kh.deprecatedOccupying.dto.param.SearchParams
+import com.kh.deprecatedOccupying.dto.response.LoginResponse
 import org.springframework.scheduling.annotation.Async
 import reactor.core.publisher.Mono
 

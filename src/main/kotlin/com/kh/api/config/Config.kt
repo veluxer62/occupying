@@ -1,8 +1,8 @@
 package com.kh.api.config
 
-import com.kh.occupying.Korail
-import com.kh.occupying.KorailProperties
-import com.kh.occupying.WebClientWrapper
+import com.kh.deprecatedOccupying.Korail
+import com.kh.deprecatedOccupying.KorailProperties
+import com.kh.deprecatedOccupying.WebClientWrapper
 import com.kh.service.AlarmSender
 import com.kh.service.BackgroundExecutor
 import com.kh.util.SecretProperties

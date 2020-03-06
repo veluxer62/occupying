@@ -1,8 +1,8 @@
 package com.kh.api.response.listCard
 
 import com.kh.api.response.Buttons
-import com.kh.occupying.dto.response.CommonResponse
-import com.kh.occupying.dto.response.SearchResponse
+import com.kh.deprecatedOccupying.dto.response.CommonResponse
+import com.kh.deprecatedOccupying.dto.response.SearchResponse
 
 data class ListCardTemplate(
         val listCard: ListCard

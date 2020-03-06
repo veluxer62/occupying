@@ -1,7 +1,7 @@
 package com.kh.api.response.listCard
 
 import com.kh.api.response.Link
-import com.kh.occupying.domain.Train
+import com.kh.deprecatedOccupying.domain.Train
 
 data class ItemsItem(
         val title: String,

@@ -8,8 +8,8 @@ import com.kh.api.response.SkillResponse
 import com.kh.api.response.basicCard.BasicCardTemplate
 import com.kh.api.response.carousel.CarouselTemplate
 import com.kh.api.response.simpleText.SimpleTextTemplate
-import com.kh.occupying.Korail
-import com.kh.occupying.dto.response.SearchResponse
+import com.kh.deprecatedOccupying.Korail
+import com.kh.deprecatedOccupying.dto.response.SearchResponse
 import com.kh.service.AlarmSender
 import com.kh.service.BackgroundExecutor
 import com.kh.util.mapTo

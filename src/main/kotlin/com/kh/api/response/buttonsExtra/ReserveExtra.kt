@@ -2,7 +2,7 @@ package com.kh.api.response.buttonsExtra
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.kh.occupying.domain.Station
+import com.kh.deprecatedOccupying.domain.Station
 import java.time.LocalDate
 import java.time.LocalTime
 
