@@ -4,6 +4,7 @@ val jvmTargetVersion: String by project
 val projectVersion: String by project
 val snakeyamlVersion: String by project
 val mockitoInlineVersion: String by project
+val fixtureVersion: String by project
 
 plugins {
 	id("org.springframework.boot")
@@ -18,6 +19,7 @@ java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
 	mavenCentral()
+	jcenter()
 }
 
 dependencies {
@@ -32,6 +34,7 @@ dependencies {
 	}
 	testImplementation("io.projectreactor:reactor-test")
 	testRuntimeOnly("org.mockito:mockito-inline:$mockitoInlineVersion")
+	testImplementation("com.appmattus.fixture:fixture:$fixtureVersion")
 }
 
 tasks.withType<KotlinCompile> {
