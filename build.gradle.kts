@@ -5,6 +5,7 @@ val projectVersion: String by project
 val snakeyamlVersion: String by project
 val mockitoInlineVersion: String by project
 val fixtureVersion: String by project
+val mockwebserverVersion: String by project
 
 plugins {
 	id("org.springframework.boot")
@@ -35,6 +36,8 @@ dependencies {
 	testImplementation("io.projectreactor:reactor-test")
 	testRuntimeOnly("org.mockito:mockito-inline:$mockitoInlineVersion")
 	testImplementation("com.appmattus.fixture:fixture:$fixtureVersion")
+	testImplementation("com.squareup.okhttp3:okhttp:$mockwebserverVersion")
+	testImplementation("com.squareup.okhttp3:mockwebserver:$mockwebserverVersion")
 }
 
 tasks.withType<KotlinCompile> {
