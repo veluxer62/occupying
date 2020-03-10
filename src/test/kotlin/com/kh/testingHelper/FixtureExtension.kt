@@ -5,11 +5,12 @@ import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.api.extension.ParameterContext
 import org.junit.jupiter.api.extension.ParameterResolver
 
+
 class FixtureExtension : ParameterResolver {
     override fun supportsParameter(
             parameterContext: ParameterContext?,
             extensionContext: ExtensionContext?): Boolean {
-        return true
+        return parameterContext!!.isAnnotated(Fixture::class.java)
     }
 
     override fun resolveParameter(
@@ -19,3 +20,7 @@ class FixtureExtension : ParameterResolver {
         return kotlinFixture().create(type)!!
     }
 }
+
+@Target(AnnotationTarget.VALUE_PARAMETER)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class Fixture
