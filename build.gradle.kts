@@ -37,7 +37,9 @@ dependencies {
 	testRuntimeOnly("org.mockito:mockito-inline:$mockitoInlineVersion")
 	testImplementation("com.appmattus.fixture:fixture:$fixtureVersion")
 	testImplementation("com.squareup.okhttp3:okhttp:$mockwebserverVersion")
-	testImplementation("com.squareup.okhttp3:mockwebserver:$mockwebserverVersion")
+	testImplementation("com.squareup.okhttp3:mockwebserver:$mockwebserverVersion") {
+		exclude("junit")
+	}
 }
 
 tasks.withType<KotlinCompile> {
