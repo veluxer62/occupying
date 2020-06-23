@@ -64,3 +64,4 @@ jobs:
 
 
             sudo java -jar $SOURCE_DIR/$FILE_NAME > /dev/null 2>&1 &
+\
