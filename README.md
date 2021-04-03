@@ -34,3 +34,31 @@ email:
 ### `java -jar build/lib/occupying-0.1.0.jar`
 서비스를 실행합니다.
 
+## Deployment Settings
+
+배포를 위해 Github의 Secret 설정이 필요합니다. 설정위치는 `Settins` > `Secrets` 메뉴를 확인하세요.
+
+- `OCCUPY_SECRET`: 프로젝트 내 시크릿 파일 설정값을 담고 있는 환경변수 입니다. Base64로 인코딩되어 저장되어야 합니다.
+  아래 명령어를 실행한 후 값으로 넣으시면 됩니다.
+
+  ```shell
+  cat src/main/resources/secret.yml | base64 | pbcopy
+  ```
+
+- `OCCUPY_SSH_HOST`: 서버는 EC2로 구성됩니다. 해당 환경변수는 EC2의 HOST 주소입니다. IP로 입력하시면 됩니다.
+
+- `OCCUPY_SSH_KEY`: EC2로 접근 시 사용되는 SSH KEY입니다. private key를 입력하시면 됩니다. key 생성 스크립트는 아래와 같습니다.
+
+  ```shell
+  ssh-keygen -t rsa -b 4096 -C "<EMAIL_ADDRESS>" -f "$HOME/.ssh/<FILE_NAME>" -N ""
+  ```
+  
+  생성한 `<FILE_NAME>`의 내용을 아래 명령어로 복사한 후 변수 값으로 입력합니다.
+
+  ```shell
+  pbcopy < ~/.ssh/<FILE_NAME>
+  ```
+
+- `OCCUPY_SSH_PORT`: SSH 접속을 위한 포트를 입력합니다. 기본포트는 22입니다.
+
+- `OCCUPY_SSH_USERNAME`: SSH 접속을 위한 사용자 계정을 입력합니다. `Amazon Linux 2 AMI`타입의 EC2인 경우 `ec2-user`입니다.
