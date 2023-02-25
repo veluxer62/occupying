@@ -6,14 +6,18 @@ import com.kh.deprecatedOccupying.WebClientWrapper
 import com.kh.service.AlarmSender
 import com.kh.service.BackgroundExecutor
 import com.kh.util.SecretProperties
+import java.util.concurrent.Executor
+import java.util.concurrent.ThreadPoolExecutor
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.scheduling.annotation.AsyncConfigurer
 import org.springframework.scheduling.annotation.EnableAsync
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor
-import java.util.concurrent.Executor
-import java.util.concurrent.ThreadPoolExecutor
+import org.springframework.web.reactive.config.CorsRegistry
+import org.springframework.web.reactive.config.EnableWebFlux
+import org.springframework.web.reactive.config.WebFluxConfigurer
+
 
 @Configuration
 class AppConfig {
@@ -52,4 +56,14 @@ class AsyncConfig : AsyncConfigurer {
         return executor
     }
 
+}
+
+@Configuration
+@EnableWebFlux
+class CorsGlobalConfiguration : WebFluxConfigurer {
+    override fun addCorsMappings(corsRegistry: CorsRegistry) {
+        corsRegistry.addMapping("/**")
+            .allowedOrigins("*")
+            .maxAge(3600)
+    }
 }
