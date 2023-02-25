@@ -1,11 +1,15 @@
 package com.kh.api
 
+import com.kh.api.request.ReserveTrainRequest
 import com.kh.api.response.TrainDto
+import com.kh.api.response.basicCard.BasicCardTemplate
+import com.kh.api.response.simpleText.SimpleTextTemplate
 import com.kh.deprecatedOccupying.Korail
 import com.kh.deprecatedOccupying.domain.Station
 import com.kh.deprecatedOccupying.dto.param.SearchParams
 import com.kh.deprecatedOccupying.dto.response.SearchResponse
 import com.kh.occupying.ItemDto
+import com.kh.service.BackgroundExecutor
 import java.lang.Exception
 import java.time.LocalDateTime
 import java.util.NoSuchElementException
@@ -18,7 +22,8 @@ import reactor.core.publisher.Mono
 
 @Component
 class WebApiHandler(
-    private val korail: Korail
+    private val korail: Korail,
+    private val backgroundExecutor: BackgroundExecutor
 ) {
     fun findTrains(serverRequest: ServerRequest): Mono<out ServerResponse> {
         return try {
@@ -49,10 +54,18 @@ class WebApiHandler(
     }
 
     fun reserveTrain(serverRequest: ServerRequest): Mono<out ServerResponse> {
-        TODO("Not yet implemented")
-    }
-
-    fun retryTrainReservation(serverRequest: ServerRequest): Mono<out ServerResponse> {
-        TODO("Not yet implemented")
+        return serverRequest.bodyToMono(ReserveTrainRequest::class.java)
+            .doOnNext {
+                backgroundExecutor.reserveTrain(
+                    searchPayload = it.searchTrainRequest.toParam(),
+                    trainNo = it.trainNo,
+                    reservationPayload = it.user.toParam()
+                )
+            }
+            .flatMap {
+                ServerResponse.accepted().build()
+            }.onErrorResume {
+                ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).bodyValue(it.message.orEmpty())
+            }
     }
 }

@@ -25,7 +25,6 @@ class Router : WebFluxConfigurer {
             accept(MediaType.APPLICATION_JSON).nest {
                 GET("/find-trains", webApiHandler::findTrains)
                 POST("/reserve-train", webApiHandler::reserveTrain)
-                POST("/retry-train-reservation", webApiHandler::retryTrainReservation)
             }
         }
     }

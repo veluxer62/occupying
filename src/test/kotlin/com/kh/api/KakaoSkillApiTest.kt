@@ -30,7 +30,7 @@ import java.util.*
 import java.util.stream.Stream
 
 @WebFluxTest
-@Import(value = [KakaoSkillHandler::class, AppConfig::class])
+@Import(value = [KakaoSkillHandler::class, WebApiHandler::class, AppConfig::class])
 class KakaoSkillApiTest {
 
     @Autowired

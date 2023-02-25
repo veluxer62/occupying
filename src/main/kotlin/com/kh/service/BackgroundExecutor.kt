@@ -40,6 +40,7 @@ open class BackgroundExecutor(
                     .block()
             alarmSender.sendSuccessMessage(reservationPayload.email)
         } catch (e: Exception) {
+            e.printStackTrace()
             alarmSender.sendFailMessage(reservationPayload.email)
         }
     }

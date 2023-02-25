@@ -70,7 +70,5 @@ data class ReservationResponse(
         @JsonProperty("h_pnr_no")
         val pnrNo: String,
         @JsonProperty("h_msg_txt5")
-        val msgTxt5: String,
-        @JsonProperty("h_acnt_apv_no")
-        val acntApvNo: String
+        val msgTxt5: String
 ) : CommonResponse
