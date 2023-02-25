@@ -12,7 +12,8 @@ data class TrainDto(
     val departureStation: Station,
     val destinationStation: Station,
     val fee: Int,
-    val seat: String
+    val seat: String,
+    val hasSeat: Boolean
 ) {
     companion object {
         fun from(train: Train) = TrainDto(
@@ -24,7 +25,8 @@ data class TrainDto(
             destinationStation = train.departureStation,
             departureStation = train.destinationStation,
             fee = train.fee,
-            seat = train.seatClass
+            seat = train.seatClass,
+            hasSeat = train.hasSeat()
         )
     }
 }
