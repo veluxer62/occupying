@@ -1,5 +1,7 @@
 package com.kh.api
 
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.kh.api.request.ReserveTrainRequest
 import com.kh.api.response.TrainDto
 import com.kh.api.response.basicCard.BasicCardTemplate
@@ -54,7 +56,10 @@ class WebApiHandler(
     }
 
     fun reserveTrain(serverRequest: ServerRequest): Mono<out ServerResponse> {
-        return serverRequest.bodyToMono(ReserveTrainRequest::class.java)
+        return serverRequest.bodyToMono(String::class.java)
+            .map {
+                jacksonObjectMapper().registerModule(JavaTimeModule()).readValue(it, ReserveTrainRequest::class.java)
+            }
             .doOnNext {
                 backgroundExecutor.reserveTrain(
                     searchPayload = it.searchTrainRequest.toParam(),
@@ -63,7 +68,7 @@ class WebApiHandler(
                 )
             }
             .flatMap {
-                ServerResponse.accepted().build()
+                ServerResponse.ok().build()
             }.onErrorResume {
                 ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).bodyValue(it.message.orEmpty())
             }
